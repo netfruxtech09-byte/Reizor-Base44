@@ -1,0 +1,86 @@
+{
+  "name": "AIFlyerSession",
+  "type": "object",
+  "properties": {
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "pending_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of paid generations pending payment"
+    },
+    "paid_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of paid generations already paid"
+    },
+    "pending_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Total USD pending payment"
+    },
+    "paid_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Total USD already paid"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "paid",
+        "partially_paid"
+      ],
+      "default": "open"
+    },
+    "stripe_payment_intent_id": {
+      "type": "string"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "organizer_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

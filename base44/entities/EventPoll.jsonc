@@ -1,0 +1,150 @@
+{
+  "name": "EventPoll",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Optional: linked event ID. Empty for standalone polls."
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "question": {
+      "type": "string"
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of poll option labels"
+    },
+    "vote_counts": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Parallel array of vote counts per option"
+    },
+    "option_a": {
+      "type": "string"
+    },
+    "option_b": {
+      "type": "string"
+    },
+    "votes_a": {
+      "type": "number",
+      "default": 0
+    },
+    "votes_b": {
+      "type": "number",
+      "default": 0
+    },
+    "allow_multiple": {
+      "type": "boolean",
+      "default": false
+    },
+    "show_results_immediately": {
+      "type": "boolean",
+      "default": true
+    },
+    "start_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "active",
+        "ended"
+      ],
+      "default": "upcoming"
+    },
+    "total_votes": {
+      "type": "number",
+      "default": 0
+    },
+    "created_by_admin": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_standalone": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if not linked to any event"
+    },
+    "notified_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When follower notifications were sent. Prevents duplicate sends."
+    }
+  },
+  "required": [
+    "question",
+    "options",
+    "start_datetime",
+    "end_datetime"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "name": "LoyaltyPointsLedger",
+  "type": "object",
+  "description": "Auditable ledger of every points award/reversal. Created only by backend loyalty functions. Used for duplicate prevention via dedup_key.",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "platform"
+      ]
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string",
+      "description": "Contact email of the program owner (organizer/artist user). Used to securely scope dashboard reads."
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "like",
+        "comment",
+        "review",
+        "scan",
+        "raffle",
+        "poll",
+        "share",
+        "custom_activity",
+        "admin_adjustment"
+      ]
+    },
+    "points": {
+      "type": "number"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the liked post, event scanned, raffle, poll, etc. Used in dedup_key."
+    },
+    "note": {
+      "type": "string",
+      "description": "Human-readable label for this ledger entry, e.g. 'Ticket scanned: Summer Fest 2026'. Shown in the fan's points history."
+    },
+    "dedup_key": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "awarded",
+        "reversed"
+      ],
+      "default": "awarded"
+    },
+    "reversed_reason": {
+      "type": "string"
+    },
+    "reversed_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "owner_type",
+    "owner_id",
+    "action_type",
+    "points",
+    "dedup_key"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

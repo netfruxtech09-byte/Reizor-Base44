@@ -1,0 +1,95 @@
+{
+  "name": "ResaleSellerPayoutRequest",
+  "type": "object",
+  "properties": {
+    "seller_email": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "amount_requested": {
+      "type": "number"
+    },
+    "payout_method": {
+      "type": "string",
+      "enum": [
+        "bank_transfer",
+        "paypal",
+        "check",
+        "crypto"
+      ],
+      "default": "bank_transfer"
+    },
+    "payout_details": {
+      "type": "string",
+      "description": "JSON object with bank details, PayPal email, mailing address, etc."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "completed",
+        "rejected",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "reviewed_by_admin_email": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_by_admin_email": {
+      "type": "string"
+    },
+    "rejected_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "seller_email",
+    "amount_requested"
+  ],
+  "rls": {
+    "create": {
+      "data.seller_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.seller_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

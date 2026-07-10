@@ -1,0 +1,110 @@
+{
+  "name": "ArtistTourSchedule",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "full_address": {
+      "type": "string",
+      "description": "Full street address including city, state, zip, country"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "lineup": {
+      "type": "string"
+    },
+    "set_time": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "social_link": {
+      "type": "string"
+    },
+    "ticket_link": {
+      "type": "string"
+    },
+    "platform_event_id": {
+      "type": "string"
+    },
+    "promo_image": {
+      "type": "string"
+    },
+    "promo_video_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "completed",
+        "cancelled"
+      ],
+      "default": "upcoming"
+    },
+    "alert_7d_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "alert_1d_sent": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "artist_id",
+    "venue_name",
+    "full_address",
+    "date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

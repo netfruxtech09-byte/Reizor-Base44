@@ -1,0 +1,100 @@
+{
+  "name": "BookingReview",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string"
+    },
+    "event_name": {
+      "type": "string"
+    },
+    "reviewer_email": {
+      "type": "string"
+    },
+    "reviewer_name": {
+      "type": "string"
+    },
+    "reviewer_role": {
+      "type": "string",
+      "enum": [
+        "artist",
+        "organizer"
+      ]
+    },
+    "reviewee_email": {
+      "type": "string"
+    },
+    "reviewee_name": {
+      "type": "string"
+    },
+    "reviewee_role": {
+      "type": "string",
+      "enum": [
+        "artist",
+        "organizer"
+      ]
+    },
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "body": {
+      "type": "string"
+    },
+    "reply": {
+      "type": "string"
+    },
+    "reply_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "booking_id",
+    "reviewer_email",
+    "reviewee_email",
+    "rating"
+  ],
+  "rls": {
+    "create": {
+      "data.reviewer_email": "{{user.email}}"
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.reviewer_email": "{{user.email}}"
+        },
+        {
+          "data.reviewee_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.reviewer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

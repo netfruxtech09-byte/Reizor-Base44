@@ -1,0 +1,97 @@
+{
+  "name": "ResaleWalletTransaction",
+  "type": "object",
+  "properties": {
+    "seller_email": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "transaction_type": {
+      "type": "string",
+      "enum": [
+        "credit",
+        "debit",
+        "refund_reversal"
+      ],
+      "default": "credit",
+      "description": "credit = seller earned money, debit = payout made, refund_reversal = credit reversed due to refund"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount credited or debited"
+    },
+    "resale_transaction_id": {
+      "type": "string",
+      "description": "Link to the ResaleTransaction"
+    },
+    "ticket_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "buyer_email": {
+      "type": "string"
+    },
+    "buyer_name": {
+      "type": "string"
+    },
+    "listing_price": {
+      "type": "number"
+    },
+    "platform_fee": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "payout_request_id": {
+      "type": "string",
+      "description": "If this is a debit, link to the payout request"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "pending",
+        "reversed"
+      ],
+      "default": "completed"
+    }
+  },
+  "required": [
+    "seller_email",
+    "transaction_type",
+    "amount"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.seller_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

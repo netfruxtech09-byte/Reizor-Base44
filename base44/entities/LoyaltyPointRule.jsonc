@@ -1,0 +1,54 @@
+{
+  "name": "LoyaltyPointRule",
+  "type": "object",
+  "description": "Single, platform-wide record of default point values for standard loyalty-earning actions. Admin-controlled only.",
+  "properties": {
+    "like_points": {
+      "type": "number",
+      "default": 5
+    },
+    "comment_points": {
+      "type": "number",
+      "default": 5
+    },
+    "review_points": {
+      "type": "number",
+      "default": 5
+    },
+    "scan_points": {
+      "type": "number",
+      "default": 25
+    },
+    "raffle_points": {
+      "type": "number",
+      "default": 5
+    },
+    "poll_points": {
+      "type": "number",
+      "default": 5
+    },
+    "share_points": {
+      "type": "number",
+      "default": 10
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

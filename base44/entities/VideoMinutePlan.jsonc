@@ -1,0 +1,133 @@
+{
+  "name": "VideoMinutePlan",
+  "type": "object",
+  "properties": {
+    "video_url": {
+      "type": "string",
+      "description": "CDN URL of the video"
+    },
+    "video_id": {
+      "type": "string",
+      "description": "Context ID (OrganizerMediaPost ID, MediaItem ID, etc.)"
+    },
+    "video_title": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "white_label"
+      ],
+      "default": "organizer"
+    },
+    "total_minutes": {
+      "type": "number",
+      "default": 0,
+      "description": "Total purchased minutes"
+    },
+    "used_minutes": {
+      "type": "number",
+      "default": 0
+    },
+    "remaining_minutes": {
+      "type": "number",
+      "default": 0
+    },
+    "free_minutes_used_this_month": {
+      "type": "number",
+      "default": 0,
+      "description": "Free monthly allowance consumed this month"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "exhausted",
+        "pending_payment"
+      ],
+      "default": "pending_payment"
+    },
+    "stripe_payment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "All Stripe PaymentIntent IDs that funded this plan"
+    },
+    "amount_paid": {
+      "type": "number",
+      "default": 0
+    },
+    "video_type": {
+      "type": "string",
+      "enum": [
+        "360",
+        "normal"
+      ],
+      "default": "normal"
+    },
+    "last_funded_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "default": null
+    },
+    "exhausted_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "default": null
+    }
+  },
+  "required": [
+    "video_url",
+    "organizer_id"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.organizer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.organizer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

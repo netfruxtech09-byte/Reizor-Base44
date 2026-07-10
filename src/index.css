@@ -1,0 +1,550 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --bottom-nav-height: 78px;
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+
+    --background: 230 50% 6%;
+    --foreground: 0 0% 96%;
+    --card: 228 45% 10%;
+    --card-foreground: 0 0% 96%;
+    --popover: 228 45% 10%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 330 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 228 35% 16%;
+    --secondary-foreground: 0 0% 96%;
+    --muted: 228 35% 16%;
+    --muted-foreground: 220 20% 85%;
+    --accent: 220 100% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 228 30% 18%;
+    --input: 220 20% 38%;
+    --ring: 330 100% 55%;
+    --chart-1: 330 100% 55%;
+    --chart-2: 220 100% 55%;
+    --chart-3: 280 80% 60%;
+    --chart-4: 30 80% 55%;
+    --chart-5: 160 70% 45%;
+    --radius: 0.5rem;
+    --input: 220 20% 38%;
+    --sidebar-background: 230 50% 5%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 330 100% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 228 40% 12%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 228 30% 18%;
+    --sidebar-ring: 330 100% 55%;
+  }
+
+  .dark {
+    --background: 230 50% 6%;
+    --foreground: 0 0% 96%;
+    --card: 228 45% 10%;
+    --card-foreground: 0 0% 96%;
+    --popover: 228 45% 10%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 330 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 228 35% 16%;
+    --secondary-foreground: 0 0% 96%;
+    --muted: 228 35% 16%;
+    --muted-foreground: 220 20% 85%;
+    --accent: 220 100% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 228 30% 18%;
+    --input: 220 20% 38%;
+    --ring: 330 100% 55%;
+    --chart-1: 330 100% 55%;
+    --chart-2: 220 100% 55%;
+    --chart-3: 280 80% 60%;
+    --chart-4: 30 80% 55%;
+    --chart-5: 160 70% 45%;
+    --sidebar-background: 230 50% 5%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 330 100% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 228 40% 12%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 228 30% 18%;
+    --sidebar-ring: 330 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html, body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.5;
+    /* Prevent pull-to-refresh white flash on mobile/tablet */
+    overscroll-behavior-y: none;
+    overscroll-behavior: none;
+  }
+  /* Global subtitle / secondary text size improvements */
+  .text-xs { font-size: 0.82rem; line-height: 1.4rem; }
+  .text-\[10px\] { font-size: 0.75rem; }
+  .text-\[11px\] { font-size: 0.78rem; }
+  p.text-sm, span.text-sm, div.text-sm, li.text-sm, label.text-sm { font-size: 0.925rem; line-height: 1.55rem; }
+  /* Form labels and helper text */
+  label { font-size: 0.82rem; line-height: 1.4rem; }
+  /* Muted subtitle paragraphs */
+  p.text-muted-foreground, p.text-xs, .font-mono.text-xs { font-size: 0.82rem; line-height: 1.4rem; }
+
+  /* Consistent font sizing across all languages/locales */
+  :lang(ar), :lang(he), :lang(ja), :lang(zh), :lang(ko), :lang(hi), :lang(th) {
+    font-size: 16px;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+  button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
+}
+
+/* ── Form field visibility on dark background ── */
+/* Default: visible border on ALL input/editable fields.
+   Also covers Radix SelectTrigger (button with role=combobox) and TimeInput selects. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+textarea,
+select,
+button[role="combobox"] {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  transition: border-color 0.15s ease;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):hover,
+textarea:hover,
+select:hover,
+button[role="combobox"]:hover {
+  border-color: rgba(255, 255, 255, 0.40) !important;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+textarea:focus,
+select:focus,
+button[role="combobox"]:focus,
+button[role="combobox"][data-state="open"] {
+  border-color: hsl(var(--primary)) !important;
+  outline: none;
+  box-shadow: 0 0 0 1px hsl(var(--ring));
+}
+/* Error state — allow red border override */
+input.border-destructive,
+textarea.border-destructive,
+select.border-destructive {
+  border-color: hsl(var(--destructive)) !important;
+}
+
+/* ── Command/combobox search input (Country/State/City dropdowns, etc.) ──
+ * The global input-border rule above applies to every <input>, including the
+ * cmdk search box, which created its own floating bordered box inside the
+ * popover. This scoped override removes it so the wrapper's own bottom
+ * border is the only visible boundary. */
+input[cmdk-input] {
+  border: none !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+input[cmdk-input]:hover,
+input[cmdk-input]:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Disabled state */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  border-color: rgba(255, 255, 255, 0.10) !important;
+  opacity: 0.5;
+}
+
+/* ── Date / time input — mobile overflow fix ────────────────────────────────
+ * On iOS WebKit, datetime-local/date inputs have an internal layout driven by
+ * -webkit-appearance that enforces a large intrinsic min-width (the width of
+ * the formatted date string + picker icon). This overrides width:100% and
+ * causes overflow even inside grid-cols-1 columns.
+ *
+ * The definitive fix:
+ *  1. -webkit-appearance: none  — removes WebKit's internal date picker chrome
+ *     and its enforced intrinsic width. The native system date picker still
+ *     opens on tap (appearance:none only affects visual layout, not behavior).
+ *  2. width:100% + min-width:0 + max-width:100% — forces the input to respect
+ *     its container.
+ *  3. display:block — ensures it participates in normal block flow width.
+ */
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="week"],
+input[type="month"] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+  text-overflow: ellipsis;
+  min-height: 36px;
+  /* Vertical centering: remove default padding that misaligns text on iOS/Android */
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 2px;
+  line-height: normal;
+  align-items: center;
+}
+
+/* Date/time/color picker icons — invert to be visible on dark backgrounds */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="week"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) brightness(1.5);
+  cursor: pointer;
+  opacity: 0.7;
+  flex-shrink: 0;
+  /* Prevent the indicator from expanding the input width on iOS */
+  position: relative;
+  z-index: 1;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Prevent Google Translate from touching elements marked notranslate */
+.notranslate,
+.notranslate * {
+  /* The CSS 'translate' property is unrelated to GT, but belt-and-suspenders */
+}
+/* Stronger: GT skips elements whose font-family contains "notranslate" — handled
+   by the class + attribute combo above. The rules below just keep it readable. */
+[translate="no"] { unicode-bidi: embed; }
+
+/* Mobile bottom nav spacing — only on mobile where the nav is visible */
+@media (max-width: 1023px) {
+  .mobile-bottom-nav-spacing {
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* iOS safe-area utilities */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-top-header {
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+}
+
+/* Fixed/sticky top bars that need iOS notch clearance — iOS only */
+html.ios-device [data-safe-top] {
+  padding-top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+}
+
+/* ── Sticky Buy Bar (Event Detail) — desktop override ── */
+/* Mobile/tablet: bar sits above the bottom nav (offset via inline style). */
+/* Desktop (lg+): no bottom nav, so pin to the very bottom of the viewport. */
+@media (min-width: 1024px) {
+  .sticky-buy-bar-fixed { bottom: env(safe-area-inset-bottom, 0px) !important; }
+}
+
+/* ── iOS notch / Dynamic Island — force nav to always clear the status bar ── */
+/* Base: no extra padding on Android / non-notch devices */
+nav.fixed-nav {
+  padding-top: 0px;
+}
+.main-content {
+  padding-top: 64px;
+}
+
+/* iOS only: safe-area padding injected via JS (see App.jsx) */
+html.ios-device nav.fixed-nav {
+  padding-top: var(--safe-area-inset-top, 0px);
+}
+html.ios-device .main-content {
+  padding-top: calc(64px + var(--safe-area-inset-top, 0px));
+}
+
+/* ── Content copy protection ── */
+/* Disable text selection on non-editable content areas */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Re-enable selection for editable/interactive elements */
+input,
+textarea,
+select,
+[contenteditable],
+[contenteditable="true"],
+.ql-editor,
+.ql-container,
+[role="textbox"],
+[role="searchbox"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+/* Prevent image dragging */
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: auto;
+}
+/* Prevent long-press callout on iOS for images/media */
+img, video {
+  -webkit-touch-callout: none;
+}
+
+/* ── Popover / Calendar mobile overflow fix ── */
+/* Radix portals render at the document root — prevent horizontal overflow on mobile. */
+[data-radix-popper-content-wrapper] {
+  max-width: calc(100vw - 16px) !important;
+  overflow: visible;
+  /* Clamp the left edge so the panel never starts off-screen */
+  left: max(8px, var(--radix-popper-transform-origin-x, 0px)) !important;
+}
+/* The actual popover panel */
+[data-radix-popper-content-wrapper] > * {
+  max-width: calc(100vw - 16px) !important;
+  box-sizing: border-box;
+}
+
+/* ── Grid/flex children min-width fix ──────────────────────────────────────
+ * Tailwind's grid-cols-* uses minmax(0,1fr) on column tracks, but grid ITEMS
+ * (the <div> children) still default to min-width:auto. Force them to 0 so
+ * all descendants (including date inputs) can shrink to fit.
+ */
+.grid > * {
+  min-width: 0 !important;
+}
+
+/* ── Global data table horizontal scroll ────────────────────────────────────
+ * Ensures all overflow-x-auto containers use momentum-based touch scrolling
+ * on iOS and that tables inside them never get clipped on mobile screens.
+ */
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+/* Tables inside scroll containers should be at least as wide as their content */
+.overflow-x-auto table,
+.overflow-x-auto > table {
+  min-width: max-content;
+}
+
+/* Custom scrollbar — visible pink/purple accent against dark background */
+/* Firefox + standard browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(330 100% 55% / 0.7) transparent;
+}
+/* WebKit (Chrome/Safari/iOS/Android) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(330 100% 55% / 0.65);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(330 100% 65% / 0.9);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Scanner flash feedback */
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Ticker animation */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+
+/* Shimmer skeleton — used by pull-to-refresh placeholders */
+@keyframes shimmer-sweep {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, hsl(var(--muted)) 0%, hsl(var(--card)) 50%, hsl(var(--muted)) 100%);
+  background-size: 200% 100%;
+  animation: shimmer-sweep 1.4s ease-in-out infinite;
+}
+
+/* Glow effects */
+.glow-lime {
+  box-shadow: 0 0 20px rgba(255, 27, 141, 0.4), 0 0 40px rgba(255, 27, 141, 0.15);
+}
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(30, 100, 255, 0.4), 0 0 40px rgba(30, 100, 255, 0.15);
+}
+
+/* Section title pill with blue background */
+.section-title {
+  display: inline-block;
+  background: hsl(220, 100%, 45%);
+  color: #fff;
+  padding: 2px 12px;
+  border-radius: 6px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+/* Text glow */
+.text-glow-lime {
+  text-shadow: 0 0 20px rgba(255, 27, 141, 0.6);
+}
+.text-glow-cyan {
+  text-shadow: 0 0 20px rgba(30, 100, 255, 0.6);
+}
+
+/* ── Mobile WebView: fix double-tap caused by hover pseudo-classes ── */
+/*
+ * On touch devices, browsers fire :hover on first tap and click on second tap.
+ * Fix: suppress hover styles on touch devices using (hover: none) media query.
+ * We only nullify the specific hover-triggered CSS properties — we do NOT use
+ * `all: revert` which would strip all base styling and break layouts on tap.
+ */
+
+/* Desktop-only hover effects — these only activate on real pointer devices */
+@media (hover: hover) and (pointer: fine) {
+  /* Hover styles are naturally applied via Tailwind hover: utilities on desktop.
+     Nothing extra needed here — Tailwind's hover: prefix already scopes to
+     devices that support hover. */
+}
+
+/* Touch devices: neutralize stuck hover states without breaking base styles */
+@media (hover: none) {
+  /* Prevent transitions from "sticking" the hover visual after touchend */
+  *:hover {
+    transition: none !important;
+  }
+
+  /* For each hover utility, override ONLY the property that hover changes.
+     Do NOT use `all: revert` — that strips background, color, display, flex etc. */
+
+  /* Background hover overrides → keep transparent / inherit */
+  .hover\:bg-primary\/10:hover { background-color: transparent !important; }
+  .hover\:bg-primary\/20:hover { background-color: transparent !important; }
+  .hover\:bg-primary\/90:hover { background-color: hsl(var(--primary)) !important; }
+  .hover\:bg-accent\/20:hover  { background-color: transparent !important; }
+  .hover\:bg-muted:hover        { background-color: transparent !important; }
+  .hover\:bg-secondary\/80:hover{ background-color: hsl(var(--secondary)) !important; }
+  .hover\:bg-secondary:hover    { background-color: hsl(var(--secondary)) !important; }
+  .hover\:bg-destructive\/10:hover { background-color: transparent !important; }
+  .hover\:bg-destructive\/90:hover { background-color: hsl(var(--destructive)) !important; }
+
+  /* Border hover overrides → keep existing border */
+  .hover\:border-primary\/30:hover  { border-color: inherit !important; }
+  .hover\:border-primary\/40:hover  { border-color: inherit !important; }
+  .hover\:border-primary\/20:hover  { border-color: inherit !important; }
+  .hover\:border-primary:hover      { border-color: inherit !important; }
+  .hover\:border-green-400\/40:hover{ border-color: inherit !important; }
+  .hover\:border-accent\/40:hover   { border-color: inherit !important; }
+
+  /* Opacity hover overrides → keep full opacity */
+  .hover\:opacity-70:hover { opacity: 1 !important; }
+  .hover\:opacity-80:hover { opacity: 1 !important; }
+
+  /* Shadow hover overrides */
+  .hover\:shadow-lg:hover { box-shadow: none !important; }
+
+  /* Text color hover overrides → keep existing color */
+  .hover\:text-primary:hover          { color: inherit !important; }
+  .hover\:text-accent:hover           { color: inherit !important; }
+  .hover\:text-green-400:hover        { color: inherit !important; }
+  .hover\:text-foreground:hover       { color: inherit !important; }
+  .hover\:text-accent-foreground:hover{ color: inherit !important; }
+
+  /* Transform hover overrides → no movement */
+  .hover\:scale-105:hover           { transform: none !important; }
+  .hover\:scale-110:hover           { transform: none !important; }
+  .hover\:translate-y-\[-2px\]:hover{ transform: none !important; }
+  .hover\:-translate-y-1:hover      { transform: none !important; }
+
+  /* Underline hover override */
+  .hover\:underline:hover { text-decoration: none !important; }
+
+  /* Shadow hover override used on event cards */
+  .hover\:shadow-primary\/5:hover { box-shadow: none !important; }
+
+  /* group-hover overrides — event cards use `group` on the clickable <a>,
+     which meant the first tap set :hover (triggering these child styles)
+     and the second tap was needed to fire the click/navigation on some
+     mobile browsers. Neutralize all group-hover visual changes on touch. */
+  .group:hover .group-hover\:scale-105     { transform: none !important; }
+  .group:hover .group-hover\:opacity-100   { opacity: 0 !important; }
+  .group:hover .group-hover\:text-primary  { color: inherit !important; }
+
+  /* Tap feedback — subtle press state, never alters layout/color */
+  button:active,
+  a:active,
+  [role="button"]:active {
+    opacity: 0.72;
+    transform: scale(0.97);
+    transition: opacity 0.08s ease, transform 0.08s ease;
+  }
+}
+
+/* Ensure touch-manipulation on all interactive elements for instant tap response */
+button,
+a,
+[role="button"],
+[role="menuitem"],
+[role="option"],
+[role="tab"],
+label[for],
+.cursor-pointer {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Form field hover — only apply on real pointer/mouse devices */
+@media (hover: none) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):hover,
+  textarea:hover,
+  select:hover,
+  button[role="combobox"]:hover {
+    /* Keep the same border as the non-hovered state on touch */
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    /* Critically: do not change background or text on input hover on touch */
+    background-color: transparent !important;
+  }
+}

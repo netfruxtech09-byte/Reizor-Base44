@@ -1,0 +1,141 @@
+{
+  "name": "Artist",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string",
+      "description": "Comma-separated genres, e.g. 'techno,house'"
+    },
+    "profile_image": {
+      "type": "string"
+    },
+    "cover_image": {
+      "type": "string"
+    },
+    "banner_image": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "description": "Full location string, e.g. City, State, Country"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "soundcloud": {
+      "type": "string"
+    },
+    "spotify": {
+      "type": "string"
+    },
+    "tiktok": {
+      "type": "string",
+      "description": "TikTok profile URL, e.g. https://www.tiktok.com/@username"
+    },
+    "follower_count": {
+      "type": "number",
+      "default": 0
+    },
+    "stripe_account_id": {
+      "type": "string"
+    },
+    "shoutout_price": {
+      "type": "number",
+      "default": 0
+    },
+    "home_address": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "suspended"
+      ],
+      "default": "active"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Admin approval status for new artist signups"
+    },
+    "rejection_reason": {
+      "type": "string",
+      "description": "Reason provided by admin when rejecting an artist application"
+    }
+  },
+  "required": [
+    "user_email",
+    "display_name"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "artist"
+          }
+        }
+      ]
+    },
+    "read": null,
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

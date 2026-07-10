@@ -1,0 +1,119 @@
+{
+  "name": "OrganizerPayoutRequest",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "ID of the event this payout is for (for event payouts)"
+    },
+    "event_title": {
+      "type": "string",
+      "description": "Title of the event at time of request"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "bank_info_id": {
+      "type": "string"
+    },
+    "bank_snapshot": {
+      "type": "string",
+      "description": "JSON snapshot of bank info at time of request"
+    },
+    "fee_breakdown": {
+      "type": "string",
+      "description": "JSON snapshot of the fee/deduction breakdown at time of payout request. Contains: gross_ticket_sales, gross_table_sales, platform_fee_deducted, cc_fee_deducted, already_paid_out, pending_amount, net_payout. Preserved permanently for audit."
+    },
+    "payout_type": {
+      "type": "string",
+      "enum": [
+        "event",
+        "referral"
+      ],
+      "default": "event",
+      "description": "Type of payout: event (ticket/table sales) or referral (affiliate income)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "requested",
+        "pending_review",
+        "approved",
+        "completed",
+        "rejected"
+      ],
+      "default": "requested"
+    },
+    "request_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rejected_reason": {
+      "type": "string"
+    },
+    "admin_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "organizer_email",
+    "amount"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

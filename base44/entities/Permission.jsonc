@@ -1,0 +1,143 @@
+{
+  "name": "Permission",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "manager",
+        "vendor",
+        "organizer"
+      ]
+    },
+    "can_create_events": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_edit_events": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_delete_events": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_events": {
+      "type": "boolean",
+      "default": true
+    },
+    "can_upload_media": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_delete_media": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_manage_tickets": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_manage_promos": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_orders": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_analytics": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_scan_tickets": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "user_email",
+    "role"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "data.user_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "AdminLoyaltyAuditLog",
+  "type": "object",
+  "description": "Audit trail of Admin loyalty control actions (freezes, reversals, program/tier deactivation and deletion). Created only by the adminLoyaltyControls backend function.",
+  "properties": {
+    "admin_email": {
+      "type": "string"
+    },
+    "admin_name": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "freeze_account",
+        "unfreeze_account",
+        "reverse_points",
+        "deactivate_program",
+        "reactivate_program",
+        "deactivate_tier",
+        "reactivate_tier",
+        "delete_program",
+        "delete_tier"
+      ]
+    },
+    "target_summary": {
+      "type": "string",
+      "description": "Human-readable summary of what was affected, e.g. fan email, program owner, or tier name"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "admin_email",
+    "action"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

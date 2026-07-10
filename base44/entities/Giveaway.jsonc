@@ -1,0 +1,220 @@
+{
+  "name": "Giveaway",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "cover_image": {
+      "type": "string"
+    },
+    "giveaway_type": {
+      "type": "string",
+      "enum": [
+        "event_linked",
+        "community"
+      ],
+      "default": "community"
+    },
+    "linked_event_id": {
+      "type": "string"
+    },
+    "linked_event_title": {
+      "type": "string"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "organizer",
+        "artist",
+        "white_label"
+      ],
+      "default": "organizer"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "num_winners": {
+      "type": "number",
+      "default": 1
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "winner_announcement_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "eligibility_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "open_to_all, ticket_holders, specific_ticket_type, followers, purchase_ticket, social_action, manual_approval"
+    },
+    "required_ticket_type_id": {
+      "type": "string"
+    },
+    "required_ticket_type_name": {
+      "type": "string"
+    },
+    "entry_instructions": {
+      "type": "string"
+    },
+    "requires_proof": {
+      "type": "boolean",
+      "default": false
+    },
+    "winner_selection": {
+      "type": "string",
+      "enum": [
+        "random",
+        "manual"
+      ],
+      "default": "random"
+    },
+    "prize_type": {
+      "type": "string",
+      "enum": [
+        "free_ticket",
+        "physical_item",
+        "wallet_credit",
+        "custom"
+      ],
+      "default": "custom"
+    },
+    "prize_description": {
+      "type": "string",
+      "description": "Prize name / title \u2014 what the winner receives"
+    },
+    "prize_details": {
+      "type": "string",
+      "description": "Longer optional description of the prize"
+    },
+    "redemption_instructions": {
+      "type": "string",
+      "description": "How the winner should redeem/claim the prize"
+    },
+    "prize_quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "prize_value": {
+      "type": "number"
+    },
+    "terms_and_conditions": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "paused",
+        "ended",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "total_entries": {
+      "type": "number",
+      "default": 0
+    },
+    "approved_entries": {
+      "type": "number",
+      "default": 0
+    },
+    "pending_proof_reviews": {
+      "type": "number",
+      "default": 0
+    },
+    "winners_selected": {
+      "type": "boolean",
+      "default": false
+    },
+    "winner_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "winner_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "winner_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "drawn_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "drawn_by": {
+      "type": "string"
+    },
+    "prize_ticket_event_id": {
+      "type": "string"
+    },
+    "prize_ticket_type_id": {
+      "type": "string"
+    },
+    "announcement_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the platform-wide fan announcement was sent. Prevents duplicate notifications."
+    }
+  },
+  "required": [
+    "title",
+    "owner_type",
+    "owner_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

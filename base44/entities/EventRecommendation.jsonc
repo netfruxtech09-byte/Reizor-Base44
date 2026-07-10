@@ -1,0 +1,117 @@
+{
+  "name": "EventRecommendation",
+  "type": "object",
+  "properties": {
+    "event_name": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_phone": {
+      "type": "string"
+    },
+    "organizer_website": {
+      "type": "string"
+    },
+    "event_url": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "recommended_by_email": {
+      "type": "string"
+    },
+    "recommended_by_name": {
+      "type": "string"
+    },
+    "why_recommend": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "outreach_sent",
+        "organizer_contacted",
+        "listed",
+        "declined",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "outreach_attempts": {
+      "type": "number",
+      "default": 0
+    },
+    "last_outreach_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "organizer_response": {
+      "type": "string"
+    },
+    "created_event_id": {
+      "type": "string"
+    },
+    "api_integration_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_name",
+    "event_date",
+    "venue_name",
+    "city",
+    "organizer_email",
+    "recommended_by_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.recommended_by_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

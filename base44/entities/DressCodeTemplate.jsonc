@@ -1,0 +1,33 @@
+{
+  "name": "DressCodeTemplate",
+  "type": "object",
+  "description": "Organizer-private saved dress code templates for reuse across events.",
+  "properties": {
+    "organizer_id": {
+      "type": "string",
+      "description": "ID of the organizer who owns this template"
+    },
+    "label": {
+      "type": "string",
+      "description": "The dress code text, e.g. Smart Casual, All White, Formal"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "label"
+  ],
+  "rls": {
+    "create": {
+      "data.organizer_id": "{{user.id}}"
+    },
+    "read": {
+      "data.organizer_id": "{{user.id}}"
+    },
+    "update": {
+      "data.organizer_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.organizer_id": "{{user.id}}"
+    }
+  }
+}

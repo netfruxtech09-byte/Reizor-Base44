@@ -1,0 +1,234 @@
+{
+  "name": "BookingContract",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "event_name": {
+      "type": "string"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "show_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "soundcheck_time": {
+      "type": "string"
+    },
+    "performance_time": {
+      "type": "string"
+    },
+    "fee": {
+      "type": "number"
+    },
+    "platform_fee": {
+      "type": "number"
+    },
+    "cc_fee": {
+      "type": "number"
+    },
+    "artist_payout": {
+      "type": "number"
+    },
+    "booker_name": {
+      "type": "string"
+    },
+    "booker_email": {
+      "type": "string"
+    },
+    "booker_phone": {
+      "type": "string"
+    },
+    "contract_notes": {
+      "type": "string"
+    },
+    "artist_special_requests": {
+      "type": "string"
+    },
+    "hotel_name": {
+      "type": "string"
+    },
+    "hotel_address": {
+      "type": "string"
+    },
+    "transport_notes": {
+      "type": "string"
+    },
+    "ai_travel_plan": {
+      "type": "string"
+    },
+    "contract_content": {
+      "type": "string"
+    },
+    "generated_by_ai": {
+      "type": "boolean",
+      "default": false
+    },
+    "guest_list_capacity": {
+      "type": "number",
+      "default": 0
+    },
+    "payment_structure": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "due_when": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "payment_proposal": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "payment_proposal_by": {
+      "type": "string"
+    },
+    "payment_proposal_note": {
+      "type": "string"
+    },
+    "payment_agreed": {
+      "type": "boolean",
+      "default": false
+    },
+    "artist_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "artist_signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "artist_signature": {
+      "type": "string"
+    },
+    "organizer_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "organizer_signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "organizer_signature": {
+      "type": "string"
+    },
+    "locked": {
+      "type": "boolean",
+      "default": false
+    },
+    "unlock_requested": {
+      "type": "boolean",
+      "default": false
+    },
+    "unlock_request_reason": {
+      "type": "string"
+    },
+    "unlock_request_by": {
+      "type": "string"
+    },
+    "admin_unlocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "contract_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "pending_organizer_review",
+        "pending_artist_review",
+        "payment_negotiation",
+        "agreed",
+        "locked"
+      ],
+      "default": "draft"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "artist_id",
+    "event_name",
+    "show_date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "data.booker_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "data.booker_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

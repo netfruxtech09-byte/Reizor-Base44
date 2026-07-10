@@ -1,0 +1,137 @@
+{
+  "name": "CommunityPost",
+  "type": "object",
+  "properties": {
+    "author_email": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "author_role": {
+      "type": "string"
+    },
+    "author_image": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "photo",
+        "event_share",
+        "text"
+      ],
+      "default": "text"
+    },
+    "content": {
+      "type": "string"
+    },
+    "media_url": {
+      "type": "string"
+    },
+    "media_type": {
+      "type": "string"
+    },
+    "media_title": {
+      "type": "string"
+    },
+    "media_date": {
+      "type": "string"
+    },
+    "media_approval_status": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "pending_review",
+        "rejected",
+        "blocked"
+      ],
+      "default": "pending_review",
+      "description": "Approval status for any attached media. Only approved media is shown publicly."
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": "string"
+    },
+    "event_venue": {
+      "type": "string"
+    },
+    "event_city": {
+      "type": "string"
+    },
+    "like_count": {
+      "type": "number",
+      "default": 0
+    },
+    "comment_count": {
+      "type": "number",
+      "default": 0
+    },
+    "liked_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_playable": {
+      "type": "boolean",
+      "default": true,
+      "description": "Backend-managed flag: true if author has storage AND streaming capacity"
+    },
+    "playability_checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "playability_block_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "author_email",
+    "type"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

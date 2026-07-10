@@ -1,0 +1,153 @@
+{
+  "name": "EventVendor",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string",
+      "description": "ID of the event organizer who created this vendor"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "ID of the event this vendor is assigned to"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Optional company name"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "ticket_allocation": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of tickets this vendor can sell"
+    },
+    "table_allocation": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of tables this vendor can sell"
+    },
+    "tickets_sold": {
+      "type": "number",
+      "default": 0
+    },
+    "tables_sold": {
+      "type": "number",
+      "default": 0
+    },
+    "seller_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Extra fee per ticket paid to this seller above the platform fee (in currency units)"
+    },
+    "seller_fee_type": {
+      "type": "string",
+      "enum": [
+        "fixed",
+        "percentage"
+      ],
+      "default": "fixed",
+      "description": "Whether the seller fee is a fixed amount or a percentage of ticket price"
+    },
+    "vendor_link": {
+      "type": "string",
+      "description": "Unique vendor referral link for this event"
+    },
+    "vendor_code": {
+      "type": "string",
+      "description": "Unique short code for tracking (e.g. VND-XXXX)"
+    },
+    "qr_code_url": {
+      "type": "string",
+      "description": "QR code image URL for this vendor's event link"
+    },
+    "invite_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "event_id",
+    "full_name",
+    "email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "data.email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

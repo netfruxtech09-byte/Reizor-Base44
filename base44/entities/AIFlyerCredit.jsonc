@@ -1,0 +1,113 @@
+{
+  "name": "AIFlyerCredit",
+  "type": "object",
+  "properties": {
+    "organizer_email": {
+      "type": "string",
+      "description": "Email of the organizer who owns this credit"
+    },
+    "organizer_id": {
+      "type": "string",
+      "description": "User ID of the organizer"
+    },
+    "organizer_name": {
+      "type": "string",
+      "description": "Full name of the organizer"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "free",
+        "paid"
+      ],
+      "description": "Whether this is a free first-gen credit or a paid credit"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "used",
+        "pending_payment",
+        "payment_failed",
+        "refunded",
+        "charged"
+      ],
+      "default": "available",
+      "description": "Current status of this credit"
+    },
+    "stripe_payment_intent_id": {
+      "type": "string",
+      "description": "Stripe PaymentIntent ID (for paid credits)"
+    },
+    "stripe_payment_method_id": {
+      "type": "string",
+      "description": "Stripe PaymentMethod ID used to charge"
+    },
+    "amount_paid": {
+      "type": "number",
+      "description": "Amount paid in USD (0 for free, 1 for paid)"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Event ID this credit was used for (set when credit is used)"
+    },
+    "generation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "succeeded",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Whether AI generation succeeded after payment"
+    },
+    "failure_reason": {
+      "type": "string",
+      "description": "Reason for payment or generation failure"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "used_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "organizer_email",
+    "type"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

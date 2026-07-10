@@ -1,0 +1,117 @@
+{
+  "name": "Referral",
+  "type": "object",
+  "description": "Affiliate referral reward record. Only the referrer (affiliate/link owner) earns a reward. The referred user receives nothing. A $3 fan_membership reward is created once, after the referred user completes the qualifying fan membership step.",
+  "properties": {
+    "referrer_id": {
+      "type": "string",
+      "description": "User id of the affiliate/referrer who owns the referral link and receives the reward."
+    },
+    "referrer_email": {
+      "type": "string"
+    },
+    "referrer_name": {
+      "type": "string"
+    },
+    "referrer_role": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "referred_email": {
+      "type": "string",
+      "description": "Attribution only \u2014 the referred user does NOT receive any reward."
+    },
+    "referred_name": {
+      "type": "string"
+    },
+    "referred_role": {
+      "type": "string"
+    },
+    "referred_id": {
+      "type": "string",
+      "description": "User id of the referred account, for audit/dedup only."
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "ticket_value": {
+      "type": "number"
+    },
+    "credit_earned": {
+      "type": "number"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "referral_type": {
+      "type": "string",
+      "enum": [
+        "ticket",
+        "fan_membership"
+      ],
+      "default": "ticket"
+    },
+    "unlock_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "comp_tier_committed": {
+      "type": "string",
+      "enum": [
+        "30pct_10guests",
+        "40pct_20guests",
+        "50pct_50guests"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "locked",
+        "withdrawn"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "referrer_email",
+    "referral_code"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.referrer_email": "{{user.email}}"
+        },
+        {
+          "data.referred_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

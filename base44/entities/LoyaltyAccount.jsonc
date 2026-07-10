@@ -1,0 +1,94 @@
+{
+  "name": "LoyaltyAccount",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "cashback_balance": {
+      "type": "number",
+      "default": 0
+    },
+    "total_spent": {
+      "type": "number",
+      "default": 0
+    },
+    "attended_count": {
+      "type": "number",
+      "default": 0
+    },
+    "show_badge": {
+      "type": "boolean",
+      "default": true
+    },
+    "membership_plan": {
+      "type": "string",
+      "enum": [
+        "none",
+        "standard",
+        "premium"
+      ],
+      "default": "none"
+    },
+    "membership_status": {
+      "type": "string",
+      "enum": [
+        "inactive",
+        "active",
+        "expired"
+      ],
+      "default": "inactive"
+    },
+    "membership_expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cashback_rate": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "user_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

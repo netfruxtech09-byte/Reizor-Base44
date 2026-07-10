@@ -1,0 +1,125 @@
+{
+  "name": "EmailCampaign",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "campaign_type": {
+      "type": "string",
+      "enum": [
+        "cart_abandonment",
+        "post_event_thank_you",
+        "upcoming_event_reminder",
+        "re_engagement",
+        "custom"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "subject_line": {
+      "type": "string"
+    },
+    "email_body": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "trigger_delay_minutes": {
+      "type": "number",
+      "default": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "recipient_count": {
+      "type": "number",
+      "default": 0
+    },
+    "opened_count": {
+      "type": "number",
+      "default": 0
+    },
+    "clicked_count": {
+      "type": "number",
+      "default": 0
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_triggered": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "organizer_email",
+    "campaign_type",
+    "name",
+    "subject_line",
+    "email_body"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "name": "ArtistPost",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_image": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "media",
+        "event",
+        "ticket",
+        "raffle",
+        "text"
+      ],
+      "default": "text"
+    },
+    "caption": {
+      "type": "string"
+    },
+    "media_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_is360": {
+      "type": "array",
+      "items": {
+        "type": "boolean"
+      }
+    },
+    "media_titles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_dates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_thumbnails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cover_image": {
+      "type": "string",
+      "description": "Optional cover/banner image for the post. Shown above the caption when present."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Hashtag-style tags for the post (stored without the # prefix)."
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": "string"
+    },
+    "ticket_link": {
+      "type": "string"
+    },
+    "ticket_price": {
+      "type": "number"
+    },
+    "ticket_original_price": {
+      "type": "number"
+    },
+    "like_count": {
+      "type": "number",
+      "default": 0
+    },
+    "comment_count": {
+      "type": "number",
+      "default": 0
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "pending_review",
+        "approved",
+        "rejected",
+        "blocked"
+      ],
+      "default": "pending_review",
+      "description": "Admin approval status. Only approved posts are shown publicly."
+    },
+    "moderation_note": {
+      "type": "string"
+    },
+    "moderated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "moderated_by": {
+      "type": "string"
+    },
+    "is_playable": {
+      "type": "boolean",
+      "default": true,
+      "description": "Backend-managed flag: true if artist has storage AND streaming capacity. Images are always playable."
+    },
+    "playability_checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When playability was last checked"
+    },
+    "playability_block_reason": {
+      "type": "string",
+      "description": "Why the post is not playable: 'storage_exhausted', 'streaming_exhausted', 'storage+streaming', or null if playable"
+    }
+  },
+  "required": [
+    "artist_id"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "name": "WLFeeConfig",
+  "type": "object",
+  "description": "Hierarchical platform fee configuration. Each record defines the fee a parent WL/Reizor charges to a direct child WL. Immutable once effective \u2014 new records are created for changes (full audit trail).",
+  "properties": {
+    "parent_type": {
+      "type": "string",
+      "enum": [
+        "reizor",
+        "white_label",
+        "sub_white_label"
+      ],
+      "description": "Who is charging the fee: 'reizor' = Reizor Main Admin, 'white_label' = top-level WL, 'sub_white_label' = sub-WL"
+    },
+    "parent_wl_id": {
+      "type": "string",
+      "description": "ID of the parent WhiteLabel record. Null/empty when parent_type = 'reizor'."
+    },
+    "parent_wl_name": {
+      "type": "string"
+    },
+    "parent_wl_email": {
+      "type": "string"
+    },
+    "child_wl_id": {
+      "type": "string",
+      "description": "ID of the child WhiteLabel record that this fee applies to"
+    },
+    "child_wl_name": {
+      "type": "string"
+    },
+    "child_wl_email": {
+      "type": "string"
+    },
+    "fee_type": {
+      "type": "string",
+      "enum": [
+        "percentage",
+        "flat",
+        "both"
+      ],
+      "default": "percentage",
+      "description": "Fee calculation method"
+    },
+    "fee_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Percentage fee applied to ticket subtotal (0\u2013100)"
+    },
+    "fee_flat": {
+      "type": "number",
+      "default": 0,
+      "description": "Fixed fee per ticket in USD"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date/time from which this fee configuration takes effect"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Only one active config per parent\u2192child pair should exist at a time. Old configs are deactivated (not deleted) when updated."
+    },
+    "superseded_by": {
+      "type": "string",
+      "description": "ID of the WLFeeConfig record that replaced this one (audit trail linkage)"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "created_by_email": {
+      "type": "string",
+      "description": "Email of the admin/WL user who created this fee config (audit trail)"
+    },
+    "created_by_role": {
+      "type": "string",
+      "description": "Role of the creator: admin, white_label, sub_white_label"
+    }
+  },
+  "required": [
+    "parent_type",
+    "child_wl_id",
+    "fee_type"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.parent_wl_email": "{{user.email}}"
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.parent_wl_email": "{{user.email}}"
+        },
+        {
+          "data.child_wl_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.parent_wl_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

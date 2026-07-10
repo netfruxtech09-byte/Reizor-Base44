@@ -1,0 +1,65 @@
+{
+  "name": "OrganizerCredit",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "source_event_id": {
+      "type": "string"
+    },
+    "source_event_title": {
+      "type": "string"
+    },
+    "source_ticket_id": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "organizer_id",
+    "amount"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

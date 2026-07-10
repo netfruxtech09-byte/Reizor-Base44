@@ -1,0 +1,100 @@
+{
+  "name": "EventRsvp",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "going",
+        "interested",
+        "pending_approval",
+        "approved",
+        "rejected"
+      ],
+      "default": "going"
+    },
+    "rsvp_type": {
+      "type": "string",
+      "enum": [
+        "standard",
+        "approval_required"
+      ],
+      "default": "standard",
+      "description": "standard = instant RSVP, approval_required = needs organizer approval"
+    },
+    "ticket_code": {
+      "type": "string",
+      "description": "QR ticket code issued after approval"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "rejected_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rejected_reason": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional note from the RSVP requester"
+    }
+  },
+  "required": [
+    "event_id",
+    "user_email",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.user_email": "{{user.email}}"
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

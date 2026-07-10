@@ -1,0 +1,184 @@
+{
+  "name": "LoyaltyRewardStatus",
+  "type": "object",
+  "properties": {
+    "fan_email": {
+      "type": "string",
+      "description": "Email of the fan who reached the tier"
+    },
+    "fan_name": {
+      "type": "string",
+      "description": "Name of the fan"
+    },
+    "organizer_id": {
+      "type": "string",
+      "description": "Organizer who owns the loyalty program"
+    },
+    "organizer_email": {
+      "type": "string",
+      "description": "Organizer email"
+    },
+    "organizer_name": {
+      "type": "string",
+      "description": "Organizer name"
+    },
+    "tier_id": {
+      "type": "string",
+      "description": "ID of the OrganizerLoyaltyTier record"
+    },
+    "tier_name": {
+      "type": "string",
+      "description": "Name of the tier reached"
+    },
+    "tier_number": {
+      "type": "number",
+      "description": "Tier number (1, 2, 3...)"
+    },
+    "events_required": {
+      "type": "number",
+      "description": "Events required for this tier"
+    },
+    "reward_type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "free_ticket",
+        "discount",
+        "backstage_access",
+        "credit",
+        "custom"
+      ],
+      "description": "Type of reward"
+    },
+    "reward_value": {
+      "type": "number",
+      "default": 0
+    },
+    "reward_description": {
+      "type": "string"
+    },
+    "custom_reward": {
+      "type": "string"
+    },
+    "ticket_event_id": {
+      "type": "string",
+      "description": "Event ID for free_ticket reward"
+    },
+    "ticket_event_title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "ticket_type_id": {
+      "type": "string",
+      "description": "Ticket type ID"
+    },
+    "ticket_type_name": {
+      "type": "string",
+      "description": "Ticket type name"
+    },
+    "ticket_count": {
+      "type": "number",
+      "default": 1
+    },
+    "auto_generate_ticket": {
+      "type": "boolean",
+      "default": false
+    },
+    "ticket_expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "generated_ticket_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of generated ticket records"
+    },
+    "reward_message": {
+      "type": "string",
+      "description": "Message shown to fan"
+    },
+    "reached_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the fan reached this tier"
+    },
+    "reward_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "given",
+        "cancelled",
+        "expired"
+      ],
+      "default": "pending",
+      "description": "Current reward fulfillment status"
+    },
+    "given_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the reward was given"
+    },
+    "given_by": {
+      "type": "string",
+      "description": "Email of who marked the reward as given"
+    },
+    "given_by_name": {
+      "type": "string"
+    },
+    "fan_notified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the fan was notified about the reward"
+    },
+    "dedup_key": {
+      "type": "string",
+      "description": "Unique key for duplicate prevention: fan_email|organizer_id|tier_id"
+    }
+  },
+  "required": [
+    "fan_email",
+    "organizer_id",
+    "tier_id",
+    "dedup_key"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "data.fan_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "data.given_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

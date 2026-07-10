@@ -1,0 +1,101 @@
+{
+  "name": "VideoWatchLog",
+  "type": "object",
+  "properties": {
+    "video_url": {
+      "type": "string",
+      "description": "CDN URL of the watched video"
+    },
+    "video_id": {
+      "type": "string",
+      "description": "Context ID (OrganizerMediaPost ID, MediaItem ID, etc.)"
+    },
+    "organizer_id": {
+      "type": "string",
+      "description": "Organizer/owner who is billed for this watch"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "fan_email": {
+      "type": "string",
+      "description": "Viewer's email"
+    },
+    "fan_name": {
+      "type": "string"
+    },
+    "minutes_watched": {
+      "type": "number",
+      "description": "Minutes watched in this session (fractional allowed)"
+    },
+    "event_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null
+    },
+    "is_admin_exempt": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if viewer is admin \u2014 no billing"
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": false,
+      "description": "Consumed from free monthly allowance"
+    },
+    "is_paid": {
+      "type": "boolean",
+      "default": false,
+      "description": "Consumed from purchased minutes"
+    },
+    "video_type": {
+      "type": "string",
+      "enum": [
+        "360",
+        "normal"
+      ],
+      "default": "normal"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "white_label"
+      ],
+      "default": "organizer"
+    }
+  },
+  "required": [
+    "video_url",
+    "organizer_id",
+    "minutes_watched"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.organizer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "short_description": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "doors_open": {
+      "type": "string"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "venue_address": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string",
+      "description": "Zip code / Postal code of the event venue"
+    },
+    "event_timezone": {
+      "type": "string",
+      "description": "IANA timezone of the event location, e.g. America/New_York. Auto-detected from the venue address/city/state/country."
+    },
+    "city": {
+      "type": "string"
+    },
+    "venue_state": {
+      "type": "string",
+      "description": "State / Region / Province of the event venue, selected from the cascading location dropdown."
+    },
+    "country": {
+      "type": "string"
+    },
+    "location_needs_review": {
+      "type": "boolean",
+      "default": false,
+      "description": "True for legacy events whose free-text city/country/state does not match the standardized dropdown dataset. Flagged for organizer/admin review instead of being silently altered."
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "techno",
+        "house",
+        "drum_and_bass",
+        "trance",
+        "hip_hop",
+        "rnb",
+        "pop",
+        "rock",
+        "jazz",
+        "electronic",
+        "latin",
+        "reggaeton",
+        "afrobeats",
+        "other"
+      ]
+    },
+    "cover_image": {
+      "type": "string"
+    },
+    "gallery_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "teaser_video_url": {
+      "type": "string"
+    },
+    "artists": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "artist_details": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "performance_time": {
+            "type": "string"
+          },
+          "social_link": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "cancelled",
+        "completed",
+        "sold_out"
+      ],
+      "default": "draft"
+    },
+    "deactivated": {
+      "type": "boolean",
+      "default": false
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "ticketed",
+        "rsvp_only"
+      ],
+      "default": "ticketed"
+    },
+    "rsvp_capacity": {
+      "type": "number"
+    },
+    "rsvp_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rsvp_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rsvp_approval_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "min_price": {
+      "type": "number"
+    },
+    "max_price": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "total_capacity": {
+      "type": "number"
+    },
+    "tickets_sold": {
+      "type": "number",
+      "default": 0
+    },
+    "likes_count": {
+      "type": "number",
+      "default": 0
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "age_restriction": {
+      "type": "string",
+      "default": "18+"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cc_fee_on_buyer": {
+      "type": "boolean",
+      "default": true
+    },
+    "platform_fee_on_buyer": {
+      "type": "boolean",
+      "default": true
+    },
+    "organizer_extra_fee": {
+      "type": "number",
+      "default": 0
+    },
+    "organizer_extra_fee_label": {
+      "type": "string"
+    },
+    "cancellation_note": {
+      "type": "string"
+    },
+    "guest_list_capacity": {
+      "type": "number",
+      "default": 0
+    },
+    "qr_code_url": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "whatsapp_link": {
+      "type": "string"
+    },
+    "dress_code": {
+      "type": "string",
+      "description": "Dress code for the event, e.g. Smart Casual, All White, Formal"
+    },
+    "recurring_series_id": {
+      "type": "string",
+      "description": "ID of the RecurringSeries this event belongs to. Null for one-time events."
+    },
+    "occurrence_index": {
+      "type": "number",
+      "description": "0-based index of this occurrence within the series (0 = first occurrence)."
+    },
+    "is_series_template": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this is the master template record for the series (not displayed publicly)."
+    }
+  },
+  "required": [
+    "title",
+    "date",
+    "venue_name",
+    "city",
+    "genre",
+    "organizer_id"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

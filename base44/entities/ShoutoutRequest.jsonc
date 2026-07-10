@@ -1,0 +1,99 @@
+{
+  "name": "ShoutoutRequest",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "fan_email": {
+      "type": "string"
+    },
+    "fan_name": {
+      "type": "string"
+    },
+    "recipient_name": {
+      "type": "string"
+    },
+    "occasion": {
+      "type": "string"
+    },
+    "instructions": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "platform_fee": {
+      "type": "number"
+    },
+    "net_amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "declined"
+      ],
+      "default": "pending"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "artist_note": {
+      "type": "string"
+    },
+    "due_by": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "artist_id",
+    "fan_email",
+    "recipient_name",
+    "amount"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.fan_email": "{{user.email}}"
+        },
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

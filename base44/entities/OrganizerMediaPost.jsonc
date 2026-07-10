@@ -1,0 +1,215 @@
+{
+  "name": "OrganizerMediaPost",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "uploaded_by_email": {
+      "type": "string"
+    },
+    "uploaded_by_role": {
+      "type": "string"
+    },
+    "upload_section": {
+      "type": "string"
+    },
+    "media_url": {
+      "type": "string",
+      "description": "Original uploaded video/image URL (preserved, never deleted)"
+    },
+    "desktop_optimized_url": {
+      "type": "string",
+      "description": "Desktop-optimized 360 video URL (3840x1920, 10-16 Mbps). Null if same as media_url or not available."
+    },
+    "mobile_playback_url": {
+      "type": "string",
+      "description": "Mobile-optimized video URL (1920x960 or 2560x1280, 4-8 Mbps, MP4/H.264/AAC with fast-start). Null if same as media_url or pending processing."
+    },
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video"
+      ],
+      "default": "image"
+    },
+    "is_360": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this video is a 360-degree video"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "description": "Custom thumbnail/cover image for video posts"
+    },
+    "caption": {
+      "type": "string"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "promote_to_front_page": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "hidden"
+      ],
+      "default": "active"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "pending_review",
+        "rejected",
+        "blocked"
+      ],
+      "default": "pending_review",
+      "description": "Admin approval status. Only approved posts are shown publicly."
+    },
+    "moderation_note": {
+      "type": "string"
+    },
+    "moderated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "moderated_by": {
+      "type": "string"
+    },
+    "processing_status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "processing",
+        "failed",
+        "not_needed"
+      ],
+      "default": "not_needed",
+      "description": "Transcoding/optimization status for large 360 videos. 'not_needed' for small videos or images. 'processing' while optimization is running. 'complete' when desktop/mobile versions are ready."
+    },
+    "resolution": {
+      "type": "string",
+      "description": "Original video resolution, e.g. '5760x2880'"
+    },
+    "bitrate": {
+      "type": "string",
+      "description": "Original video bitrate, e.g. '40 Mbps'"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "Original file size in bytes"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Video duration in seconds"
+    },
+    "playback_status": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "optimized",
+        "too_large"
+      ],
+      "default": "direct",
+      "description": "Playback recommendation. 'direct' = original is fine. 'optimized' = use desktop/mobile URLs. 'too_large' = original too large for any device."
+    },
+    "mux_asset_id": {
+      "type": "string",
+      "description": "Mux Asset ID for HLS adaptive streaming"
+    },
+    "mux_playback_id": {
+      "type": "string",
+      "description": "Mux Playback ID used to construct HLS stream URL"
+    },
+    "mux_playback_url": {
+      "type": "string",
+      "description": "Full Mux HLS stream URL (https://stream.mux.com/{PLAYBACK_ID}.m3u8)"
+    },
+    "mux_status": {
+      "type": "string",
+      "enum": [
+        "preparing",
+        "ready",
+        "errored",
+        "idle"
+      ],
+      "description": "Mux asset encoding status"
+    },
+    "mux_error_message": {
+      "type": "string",
+      "description": "Error message if Mux encoding failed"
+    },
+    "is_playable": {
+      "type": "boolean",
+      "default": true,
+      "description": "Backend-managed flag: true if organizer has storage AND streaming capacity. Updated by batchUpdateMediaPlayability automation. Images are always playable."
+    },
+    "playability_checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When playability was last checked by the automation"
+    },
+    "playability_block_reason": {
+      "type": "string",
+      "description": "Why the post is not playable: 'storage_exhausted', 'streaming_exhausted', 'storage+streaming', or null if playable"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "media_url",
+    "media_type"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

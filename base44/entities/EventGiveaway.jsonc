@@ -1,0 +1,122 @@
+{
+  "name": "EventGiveaway",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "description": "List of giveaway items, each with subject and quantity",
+      "items": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "drawn",
+        "closed"
+      ],
+      "default": "active"
+    },
+    "drawn_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "drawn_by": {
+      "type": "string"
+    },
+    "winners": {
+      "type": "array",
+      "description": "Winner records with redeem tracking",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_subject": {
+            "type": "string"
+          },
+          "winner_email": {
+            "type": "string"
+          },
+          "winner_name": {
+            "type": "string"
+          },
+          "redeem_status": {
+            "type": "string",
+            "enum": [
+              "won",
+              "redeemed"
+            ],
+            "default": "won"
+          },
+          "redeemed_at": {
+            "type": "string"
+          },
+          "redeemed_by": {
+            "type": "string"
+          },
+          "redeem_code": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "organizer_id",
+    "items"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

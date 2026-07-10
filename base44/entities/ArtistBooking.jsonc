@@ -1,0 +1,146 @@
+{
+  "name": "ArtistBooking",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "booker_name": {
+      "type": "string"
+    },
+    "booker_email": {
+      "type": "string"
+    },
+    "booker_phone": {
+      "type": "string"
+    },
+    "event_name": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "budget": {
+      "type": "number"
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "declined",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "assignment_status": {
+      "type": "string",
+      "enum": [
+        "assigned",
+        "confirmed",
+        "completed"
+      ],
+      "description": "Tracks the assignment lifecycle once booking is accepted"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "partially_paid",
+        "paid"
+      ],
+      "default": "pending",
+      "description": "Overall payment status for this booking"
+    },
+    "advance_paid": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount paid as advance"
+    },
+    "cancellation_reason": {
+      "type": "string"
+    },
+    "cancelled_by": {
+      "type": "string"
+    },
+    "artist_response": {
+      "type": "string"
+    },
+    "technical_rider_url": {
+      "type": "string"
+    },
+    "artist_rider_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "artist_id",
+    "booker_email",
+    "booker_name",
+    "event_name"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.booker_email": "{{user.email}}"
+        },
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "data.booker_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "SavedRequirementTemplate",
+  "type": "object",
+  "description": "Organizer-private saved Activity Requirement text templates for reuse across giveaways/raffles.",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "template_name": {
+      "type": "string"
+    },
+    "requirements_text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "template_name",
+    "requirements_text"
+  ],
+  "rls": {
+    "create": {
+      "data.organizer_id": "{{user.id}}"
+    },
+    "read": {
+      "data.organizer_id": "{{user.id}}"
+    },
+    "update": {
+      "data.organizer_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.organizer_id": "{{user.id}}"
+    }
+  }
+}

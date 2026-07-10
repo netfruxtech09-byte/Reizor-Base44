@@ -1,0 +1,91 @@
+{
+  "name": "ArtistProfileEdit",
+  "type": "object",
+  "description": "Pending artist profile update request. Stores submitted (pending) values separately from the live approved Artist record so the public profile never changes until an admin explicitly approves. On approval, pending_data is applied to the Artist entity.",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string",
+      "description": "Display name at time of submission, for admin list display"
+    },
+    "submitted_by_name": {
+      "type": "string"
+    },
+    "pending_data": {
+      "type": "object",
+      "description": "New values submitted by the artist (editable fields only)"
+    },
+    "original_data": {
+      "type": "object",
+      "description": "Snapshot of the live approved Artist values at submission time, used for before/after comparison"
+    },
+    "changed_fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending_review"
+    },
+    "rejection_reason": {
+      "type": "string"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "artist_id",
+    "pending_data"
+  ],
+  "rls": {
+    "create": {
+      "data.artist_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

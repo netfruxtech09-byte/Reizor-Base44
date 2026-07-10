@@ -1,0 +1,63 @@
+{
+  "name": "LoyaltyProgram",
+  "type": "object",
+  "description": "Represents a single, unified points-based Loyalty & Rewards program owned by an Organizer, Artist, or the Platform (Reizor Community). Created automatically by backend loyalty functions on first qualifying action.",
+  "properties": {
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "platform"
+      ]
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Organizer/Artist id. Use 'platform' for the Reizor Community program."
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "deactivated"
+      ],
+      "default": "active"
+    },
+    "scan_points": {
+      "type": "number",
+      "description": "Points awarded to a fan when their ticket is validly scanned/attended at one of this owner's events. Null/0 falls back to the platform default (LoyaltyPointRule.scan_points)."
+    },
+    "deactivated_by": {
+      "type": "string"
+    },
+    "deactivated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "owner_type",
+    "owner_id"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

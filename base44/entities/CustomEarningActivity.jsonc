@@ -1,0 +1,152 @@
+{
+  "name": "CustomEarningActivity",
+  "type": "object",
+  "description": "A proposed custom loyalty-earning activity submitted by an Organizer/Artist/Admin. Must be approved by Admin before it can award points.",
+  "properties": {
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "platform"
+      ]
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "activity_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "proposed_points": {
+      "type": "number"
+    },
+    "approved_points": {
+      "type": "number",
+      "description": "Set by Admin on approval. The value actually awarded."
+    },
+    "verification_method": {
+      "type": "string",
+      "enum": [
+        "qr_scan",
+        "staff_approval",
+        "admin_approval",
+        "verified_attendance",
+        "automatic_system"
+      ]
+    },
+    "related_event_id": {
+      "type": "string"
+    },
+    "related_event_title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "deactivated"
+      ],
+      "default": "pending"
+    },
+    "admin_notes": {
+      "type": "string"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "owner_type",
+    "owner_id",
+    "owner_email",
+    "activity_name",
+    "proposed_points",
+    "verification_method"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "artist"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.owner_email": "{{user.email}}"
+            },
+            {
+              "data.status": "pending"
+            }
+          ]
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "$and": [
+            {
+              "data.owner_email": "{{user.email}}"
+            },
+            {
+              "data.status": "pending"
+            }
+          ]
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

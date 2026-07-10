@@ -1,0 +1,116 @@
+{
+  "name": "InviteLink",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Unique invite code used in the link"
+    },
+    "created_by_email": {
+      "type": "string"
+    },
+    "created_by_name": {
+      "type": "string"
+    },
+    "created_by_role": {
+      "type": "string"
+    },
+    "target_role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "organizer",
+        "artist",
+        "manager",
+        "vendor"
+      ],
+      "default": "user",
+      "description": "Role the invited user will be given"
+    },
+    "label": {
+      "type": "string",
+      "description": "Optional label for this invite link (e.g. 'WhatsApp Group July')"
+    },
+    "max_uses": {
+      "type": "number",
+      "default": 0,
+      "description": "0 = unlimited"
+    },
+    "times_used": {
+      "type": "number",
+      "default": 0
+    },
+    "first_used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the first use of this invite link"
+    },
+    "last_used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the most recent use"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional expiry date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "disabled"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "code",
+    "created_by_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "data.created_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.created_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.created_by_email": "{{user.email}}"
+        }
+      ]
+    }
+  }
+}

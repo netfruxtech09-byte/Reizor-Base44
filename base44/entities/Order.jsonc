@@ -1,0 +1,367 @@
+{
+  "name": "Order",
+  "type": "object",
+  "properties": {
+    "order_number": {
+      "type": "string"
+    },
+    "customer_email": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string",
+      "description": "Email of the event organizer \u2014 stored at order creation for reliable chargeback/refund notifications"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ticket_type_id": {
+            "type": "string"
+          },
+          "ticket_type_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Pure ticket price total (quantity \u00d7 unit_price). Organizer gross sales."
+    },
+    "service_fee": {
+      "type": "number",
+      "description": "Platform fee charged at checkout (per-ticket tier-based fee \u00d7 quantity). Always added to customer total."
+    },
+    "card_processing_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Stripe/card processing fee (2.9% + $0.30 of amountBeforeStripe). Stored at checkout time."
+    },
+    "cc_fee_paid_by": {
+      "type": "string",
+      "enum": [
+        "buyer",
+        "organizer"
+      ],
+      "default": "buyer"
+    },
+    "organizer_extra_fee": {
+      "type": "number",
+      "default": 0
+    },
+    "vendor_commission": {
+      "type": "number",
+      "default": 0
+    },
+    "tax": {
+      "type": "number"
+    },
+    "discount_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "total": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "refunded",
+        "chargeback",
+        "cancelled",
+        "failed",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "pending_reason": {
+      "type": "string",
+      "enum": [
+        "awaiting_payment_completion",
+        "awaiting_stripe_confirmation",
+        "payment_processing",
+        "refund_requested",
+        "manual_review_required",
+        "payment_verification_required"
+      ]
+    },
+    "pending_since": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_payment_check_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status_updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "stripe",
+        "wallet",
+        "hybrid"
+      ],
+      "default": "stripe"
+    },
+    "wallet_amount_paid": {
+      "type": "number",
+      "default": 0
+    },
+    "stripe_amount_paid": {
+      "type": "number",
+      "default": 0
+    },
+    "stripe_session_id": {
+      "type": "string"
+    },
+    "stripe_payment_intent_id": {
+      "type": "string"
+    },
+    "stripe_charge_id": {
+      "type": "string"
+    },
+    "stripe_customer_id": {
+      "type": "string"
+    },
+    "stripe_refund_id": {
+      "type": "string"
+    },
+    "stripe_payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "failed",
+        "refunded"
+      ],
+      "default": "pending"
+    },
+    "stripe_webhook_event_id": {
+      "type": "string"
+    },
+    "email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "refund_requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "refund_request_reason": {
+      "type": "string"
+    },
+    "refunded_by": {
+      "type": "string"
+    },
+    "refunded_by_email": {
+      "type": "string"
+    },
+    "refunded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "refund_reason": {
+      "type": "string"
+    },
+    "chargeback_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expired_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reconciliation_status": {
+      "type": "string",
+      "enum": [
+        "not_checked",
+        "verified_with_stripe",
+        "reconciliation_failed",
+        "auto_completed",
+        "manual_override"
+      ],
+      "default": "not_checked"
+    },
+    "status_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "pending_reason": {
+            "type": "string"
+          },
+          "changed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changed_by": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "promo_code": {
+      "type": "string"
+    },
+    "seller_link_id": {
+      "type": "string"
+    },
+    "seller_tracking_code": {
+      "type": "string"
+    },
+    "seller_link_code": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number"
+    },
+    "guest_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "guest_phone": {
+      "type": "string"
+    },
+    "wl_fee_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Total White Label hierarchical fee applied to this order (sum of all WL chain fees)"
+    },
+    "wl_fee_breakdown": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "config_id": {
+            "type": "string"
+          },
+          "parent_type": {
+            "type": "string"
+          },
+          "parent_wl_id": {
+            "type": "string"
+          },
+          "parent_wl_name": {
+            "type": "string"
+          },
+          "child_wl_id": {
+            "type": "string"
+          },
+          "child_wl_name": {
+            "type": "string"
+          },
+          "fee_type": {
+            "type": "string"
+          },
+          "fee_percent": {
+            "type": "number"
+          },
+          "fee_flat": {
+            "type": "number"
+          },
+          "fee_amount": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Ordered per-level WL fee breakdown. Immutable after order completion. Root (Reizor) first, direct parent last."
+    },
+    "child_wl_id": {
+      "type": "string",
+      "description": "The WL/Sub-WL tenant this order belongs to (event organizer's WL context)"
+    },
+    "child_wl_name": {
+      "type": "string",
+      "description": "Name of the child WL for display"
+    }
+  },
+  "required": [
+    "order_number",
+    "customer_email",
+    "event_id",
+    "total"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.customer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

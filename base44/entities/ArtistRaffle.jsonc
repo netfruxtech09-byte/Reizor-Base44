@@ -1,0 +1,105 @@
+{
+  "name": "ArtistRaffle",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "post_id": {
+      "type": "string"
+    },
+    "prize_title": {
+      "type": "string"
+    },
+    "prize_description": {
+      "type": "string"
+    },
+    "terms_and_conditions": {
+      "type": "string"
+    },
+    "num_winners": {
+      "type": "number",
+      "default": 1
+    },
+    "entry_requirement": {
+      "type": "string",
+      "enum": [
+        "follow",
+        "comment",
+        "free"
+      ],
+      "default": "free"
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "drawn",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "winner_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "winner_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "drawn_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "artist_id",
+    "prize_title",
+    "num_winners"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "SavedActivity",
+  "type": "object",
+  "description": "Fan-saved raffles, giveaways, and polls. Private to the saving user.",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "activity_type": {
+      "type": "string",
+      "enum": [
+        "raffle",
+        "giveaway",
+        "poll"
+      ]
+    },
+    "activity_id": {
+      "type": "string"
+    },
+    "activity_title": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "activity_type",
+    "activity_id"
+  ],
+  "rls": {
+    "create": {
+      "data.user_email": "{{user.email}}"
+    },
+    "read": {
+      "data.user_email": "{{user.email}}"
+    },
+    "update": {
+      "data.user_email": "{{user.email}}"
+    },
+    "delete": {
+      "data.user_email": "{{user.email}}"
+    }
+  }
+}

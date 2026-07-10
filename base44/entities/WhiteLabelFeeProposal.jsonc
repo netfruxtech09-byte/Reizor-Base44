@@ -1,0 +1,109 @@
+{
+  "name": "WhiteLabelFeeProposal",
+  "type": "object",
+  "properties": {
+    "parent_wl_id": {
+      "type": "string"
+    },
+    "parent_wl_name": {
+      "type": "string"
+    },
+    "parent_wl_email": {
+      "type": "string"
+    },
+    "sub_wl_name": {
+      "type": "string"
+    },
+    "sub_wl_email": {
+      "type": "string"
+    },
+    "sub_wl_brand": {
+      "type": "string"
+    },
+    "proposed_fee_type": {
+      "type": "string",
+      "enum": [
+        "percentage",
+        "flat",
+        "both"
+      ],
+      "default": "percentage"
+    },
+    "proposed_fee_percent": {
+      "type": "number",
+      "default": 0
+    },
+    "proposed_fee_flat": {
+      "type": "number",
+      "default": 0
+    },
+    "admin_counter_fee_type": {
+      "type": "string",
+      "enum": [
+        "percentage",
+        "flat",
+        "both"
+      ]
+    },
+    "admin_counter_fee_percent": {
+      "type": "number"
+    },
+    "admin_counter_fee_flat": {
+      "type": "number"
+    },
+    "admin_note": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "refused",
+        "countered",
+        "agreed"
+      ],
+      "default": "pending"
+    },
+    "created_wl_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "parent_wl_id",
+    "sub_wl_name",
+    "sub_wl_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.parent_wl_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.parent_wl_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "name": "MediaItem",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video"
+      ],
+      "default": "image"
+    },
+    "url": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "media_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "show_on_homepage": {
+      "type": "boolean",
+      "default": false
+    },
+    "homepage_priority": {
+      "type": "number",
+      "default": 0,
+      "description": "Higher = shown more often on front page. 0 = default, 10 = max boost."
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0
+    },
+    "uploaded_by_name": {
+      "type": "string"
+    },
+    "uploaded_by_email": {
+      "type": "string"
+    },
+    "uploaded_by_role": {
+      "type": "string"
+    },
+    "upload_section": {
+      "type": "string",
+      "description": "Which part of the platform this was uploaded from, e.g. 'admin_library', 'community_post', 'artist_gallery', 'event_images', 'organizer_media'"
+    },
+    "related_id": {
+      "type": "string",
+      "description": "ID of the related entity (post, event, album, etc.)"
+    },
+    "related_title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "hidden"
+      ],
+      "default": "active"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "pending_review",
+        "rejected",
+        "blocked"
+      ],
+      "default": "pending_review",
+      "description": "Admin media moderation status. Only approved media is shown publicly."
+    },
+    "moderation_note": {
+      "type": "string",
+      "description": "Admin note about why media was rejected or blocked"
+    },
+    "moderated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "moderated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "type",
+    "url"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

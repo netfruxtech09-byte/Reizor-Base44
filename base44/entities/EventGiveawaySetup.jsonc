@@ -1,0 +1,119 @@
+{
+  "name": "EventGiveawaySetup",
+  "type": "object",
+  "description": "Giveaway configuration for an event. First eligible users to complete the required action receive the reward until quantity runs out.",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "reward_name": {
+      "type": "string",
+      "description": "e.g. T-Shirt, Free Drink, VIP Upgrade"
+    },
+    "reward_description": {
+      "type": "string"
+    },
+    "reward_value": {
+      "type": "number",
+      "description": "Optional monetary value of the reward"
+    },
+    "total_quantity": {
+      "type": "number",
+      "description": "Total rewards available"
+    },
+    "claimed_quantity": {
+      "type": "number",
+      "default": 0
+    },
+    "eligibility_action": {
+      "type": "string",
+      "enum": [
+        "ticket_purchase",
+        "repost_share",
+        "follow_organizer",
+        "other"
+      ],
+      "default": "other"
+    },
+    "eligibility_notes": {
+      "type": "string"
+    },
+    "collection_instructions": {
+      "type": "string"
+    },
+    "start_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "active",
+        "claimed_out",
+        "ended",
+        "cancelled"
+      ],
+      "default": "upcoming"
+    }
+  },
+  "required": [
+    "event_id",
+    "organizer_id",
+    "title",
+    "reward_name",
+    "total_quantity"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

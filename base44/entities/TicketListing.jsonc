@@ -1,0 +1,95 @@
+{
+  "name": "TicketListing",
+  "type": "object",
+  "properties": {
+    "ticket_id": {
+      "type": "string"
+    },
+    "ticket_code": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "event_end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Event end date/time to check if resale is still valid"
+    },
+    "ticket_type_name": {
+      "type": "string"
+    },
+    "seller_email": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "original_price": {
+      "type": "number"
+    },
+    "resale_price": {
+      "type": "number"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "sold",
+        "cancelled",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "sold_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sold_to_email": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ticket_id",
+    "ticket_code",
+    "event_id",
+    "seller_email",
+    "resale_price"
+  ],
+  "rls": {
+    "create": {
+      "data.seller_email": "{{user.email}}"
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.seller_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.seller_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

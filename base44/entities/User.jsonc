@@ -1,0 +1,60 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "organizer",
+        "artist",
+        "manager",
+        "vendor",
+        "user",
+        "white_label",
+        "sub_white_label"
+      ],
+      "default": "user"
+    },
+    "is_artist": {
+      "type": "boolean",
+      "default": false,
+      "description": "Additive artist capability \u2014 does not replace the user's primary role"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "User's date of birth (YYYY-MM-DD) \u2014 used to calculate age for demographic analytics"
+    },
+    "state": {
+      "type": "string",
+      "description": "State or province the user is based in"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "non_binary",
+        "prefer_not_to_say"
+      ],
+      "description": "User's gender for demographic analytics"
+    },
+    "has_seen_fan_onboarding_guide": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the one-time fan signup onboarding popup has been shown"
+    },
+    "has_seen_prize_claim_guide": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the one-time prize-claiming guide popup has been shown after first activation/giveaway participation"
+    },
+    "is_public_profile": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fan opt-in: when true, their name/genres are visible on a public fan profile page and searchable by name"
+    }
+  },
+  "required": []
+}

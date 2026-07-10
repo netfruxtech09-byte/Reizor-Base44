@@ -1,0 +1,106 @@
+{
+  "name": "EventGiveawayClaim",
+  "type": "object",
+  "description": "A user's claim of a giveaway reward. First-come-first-served until quantity exhausted.",
+  "properties": {
+    "giveaway_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "eligibility_action": {
+      "type": "string"
+    },
+    "proof_note": {
+      "type": "string"
+    },
+    "reward_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "claimed",
+        "fulfilled",
+        "cancelled"
+      ],
+      "default": "claimed"
+    },
+    "claimed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fulfilled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fulfillment_note": {
+      "type": "string"
+    },
+    "notified_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "giveaway_id",
+    "event_id",
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

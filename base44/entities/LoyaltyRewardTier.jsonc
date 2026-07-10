@@ -1,0 +1,142 @@
+{
+  "name": "LoyaltyRewardTier",
+  "type": "object",
+  "description": "A custom points-threshold reward tier created by an Organizer, Artist, or Admin (platform).",
+  "properties": {
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "platform"
+      ]
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "tier_name": {
+      "type": "string"
+    },
+    "points_required": {
+      "type": "number"
+    },
+    "reward_type": {
+      "type": "string",
+      "enum": [
+        "free_drink",
+        "free_entry",
+        "merchandise",
+        "free_ticket",
+        "discount",
+        "credit",
+        "custom"
+      ],
+      "default": "custom"
+    },
+    "reward_title": {
+      "type": "string"
+    },
+    "reward_description": {
+      "type": "string"
+    },
+    "redemption_instructions": {
+      "type": "string"
+    },
+    "ticket_max_value": {
+      "type": "number",
+      "description": "Max $ value for free_ticket reward type"
+    },
+    "ticket_event_id": {
+      "type": "string",
+      "description": "Event this free ticket reward is for (organizer-owned tiers only)"
+    },
+    "ticket_event_title": {
+      "type": "string"
+    },
+    "ticket_type_id": {
+      "type": "string",
+      "description": "TicketType this free ticket reward grants"
+    },
+    "ticket_type_name": {
+      "type": "string"
+    },
+    "is_repeatable": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "deactivated_by": {
+      "type": "string",
+      "description": "Admin email who deactivated this tier (set only when Admin deactivates it)"
+    },
+    "deactivated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deactivation_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_type",
+    "owner_id",
+    "tier_name",
+    "points_required",
+    "reward_title"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "artist"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

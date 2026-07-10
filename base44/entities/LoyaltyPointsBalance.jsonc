@@ -1,0 +1,86 @@
+{
+  "name": "LoyaltyPointsBalance",
+  "type": "object",
+  "description": "A fan's points balance within a specific loyalty program (organizer, artist, or platform). Mutated only by backend loyalty functions.",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "platform"
+      ]
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string",
+      "description": "Contact email of the program owner (organizer/artist user). Used to securely scope dashboard reads."
+    },
+    "balance": {
+      "type": "number",
+      "default": 0
+    },
+    "lifetime_points": {
+      "type": "number",
+      "default": 0
+    },
+    "frozen": {
+      "type": "boolean",
+      "default": false
+    },
+    "frozen_reason": {
+      "type": "string"
+    },
+    "frozen_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "owner_type",
+    "owner_id"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

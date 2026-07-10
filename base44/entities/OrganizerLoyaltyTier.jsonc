@@ -1,0 +1,138 @@
+{
+  "name": "OrganizerLoyaltyTier",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "tier_number": {
+      "type": "number",
+      "description": "1, 2, 3, etc."
+    },
+    "tier_name": {
+      "type": "string",
+      "description": "e.g. Bronze, Silver, Gold"
+    },
+    "description": {
+      "type": "string",
+      "description": "What the fan needs to do to reach this tier"
+    },
+    "events_required": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of events attended to reach this tier"
+    },
+    "reward_type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "free_ticket",
+        "discount",
+        "backstage_access",
+        "credit",
+        "custom"
+      ],
+      "default": "none"
+    },
+    "reward_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Dollar value for credit, or % for discount"
+    },
+    "reward_description": {
+      "type": "string",
+      "description": "Custom message sent to organizer when fan reaches this tier"
+    },
+    "custom_reward": {
+      "type": "string",
+      "description": "Free-text custom reward description (used when reward_type is 'custom')"
+    },
+    "ticket_event_id": {
+      "type": "string",
+      "description": "Event ID for free_ticket reward \u2014 which event the ticket is for"
+    },
+    "ticket_event_title": {
+      "type": "string",
+      "description": "Cached event title for display"
+    },
+    "ticket_type_id": {
+      "type": "string",
+      "description": "Ticket type ID for free_ticket reward"
+    },
+    "ticket_type_name": {
+      "type": "string",
+      "description": "Cached ticket type name for display"
+    },
+    "ticket_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Number of free tickets to give"
+    },
+    "auto_generate_ticket": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, tickets are generated automatically when fan reaches tier. If false, organizer must manually send."
+    },
+    "ticket_expiry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Optional expiry date for the ticket reward"
+    },
+    "reward_message": {
+      "type": "string",
+      "description": "Message shown to fan when they receive this ticket reward"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "tier_number",
+    "tier_name"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.organizer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.organizer_email": "{{user.email}}"
+        }
+      ]
+    }
+  }
+}

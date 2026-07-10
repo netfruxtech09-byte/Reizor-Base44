@@ -1,0 +1,124 @@
+{
+  "name": "TableReservation",
+  "type": "object",
+  "properties": {
+    "table_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "buyer_email": {
+      "type": "string"
+    },
+    "buyer_name": {
+      "type": "string"
+    },
+    "table_name": {
+      "type": "string"
+    },
+    "seats": {
+      "type": "number"
+    },
+    "total_price": {
+      "type": "number"
+    },
+    "guest_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "platform_fee": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "reserved",
+        "cancelled",
+        "checked_in"
+      ],
+      "default": "reserved"
+    },
+    "checked_in_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checked_in_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "table_id",
+    "event_id",
+    "buyer_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.buyer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.buyer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    }
+  }
+}

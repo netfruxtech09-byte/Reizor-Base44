@@ -1,0 +1,143 @@
+{
+  "name": "ArtistAlbum",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "media_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_is360": {
+      "type": "array",
+      "items": {
+        "type": "boolean"
+      },
+      "description": "Whether each media item is a 360-degree video"
+    },
+    "media_captions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_titles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_dates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "media_thumbnails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Parallel array of thumbnail URLs for video media items. Empty string = no custom thumbnail."
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": true
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "pending_review",
+        "rejected",
+        "blocked"
+      ],
+      "default": "pending_review",
+      "description": "Admin approval status. Only approved albums are shown publicly on artist profiles."
+    },
+    "moderation_note": {
+      "type": "string"
+    },
+    "moderated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "moderated_by": {
+      "type": "string"
+    },
+    "is_playable": {
+      "type": "boolean",
+      "default": true,
+      "description": "Backend-managed flag: true if artist has storage AND streaming capacity. Non-video items always playable."
+    },
+    "playability_checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When playability was last checked"
+    },
+    "playability_block_reason": {
+      "type": "string",
+      "description": "Why the album is not playable: 'storage_exhausted', 'streaming_exhausted', 'storage+streaming', or null if playable"
+    }
+  },
+  "required": [
+    "artist_id",
+    "title"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

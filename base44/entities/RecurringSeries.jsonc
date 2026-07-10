@@ -1,0 +1,127 @@
+{
+  "name": "RecurringSeries",
+  "type": "object",
+  "description": "Defines the recurrence configuration for a series of events. Each occurrence is a separate Event record linked via recurring_series_id.",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Series title (same as the event title)"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "biweekly",
+        "monthly"
+      ],
+      "description": "How often occurrences repeat"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date/time of the first occurrence"
+    },
+    "event_duration_minutes": {
+      "type": "number",
+      "description": "Duration in minutes from start to end for each occurrence"
+    },
+    "end_condition": {
+      "type": "string",
+      "enum": [
+        "by_date",
+        "by_count"
+      ],
+      "description": "How the series ends"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Series ends on or before this date (used when end_condition=by_date)"
+    },
+    "end_after_occurrences": {
+      "type": "number",
+      "description": "Series ends after this many occurrences (used when end_condition=by_count)"
+    },
+    "total_occurrences_generated": {
+      "type": "number",
+      "default": 0,
+      "description": "How many occurrence Events have been created so far"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "ended",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "template_event_id": {
+      "type": "string",
+      "description": "ID of the master Event record used as template for this series"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "title",
+    "frequency",
+    "start_date",
+    "end_condition"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

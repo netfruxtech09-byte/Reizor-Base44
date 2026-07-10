@@ -1,0 +1,100 @@
+{
+  "name": "ResaleTransaction",
+  "type": "object",
+  "properties": {
+    "ticket_listing_id": {
+      "type": "string"
+    },
+    "ticket_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "original_seller_email": {
+      "type": "string"
+    },
+    "original_seller_name": {
+      "type": "string"
+    },
+    "buyer_email": {
+      "type": "string"
+    },
+    "buyer_name": {
+      "type": "string"
+    },
+    "listing_price": {
+      "type": "number"
+    },
+    "original_ticket_price": {
+      "type": "number"
+    },
+    "platform_fee": {
+      "type": "number"
+    },
+    "seller_payout": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "refunded",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payment_method": {
+      "type": "string"
+    },
+    "transaction_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ticket_listing_id",
+    "ticket_id",
+    "event_id",
+    "original_seller_email",
+    "buyer_email",
+    "listing_price",
+    "platform_fee",
+    "seller_payout"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.original_seller_email": "{{user.email}}"
+        },
+        {
+          "data.buyer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "name": "LoyaltyRewardClaim",
+  "type": "object",
+  "description": "Created automatically when a fan's points balance crosses a LoyaltyRewardTier threshold.",
+  "properties": {
+    "fan_email": {
+      "type": "string"
+    },
+    "fan_name": {
+      "type": "string"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "organizer",
+        "artist",
+        "platform"
+      ]
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "tier_id": {
+      "type": "string"
+    },
+    "tier_name": {
+      "type": "string"
+    },
+    "points_spent": {
+      "type": "number"
+    },
+    "reward_title": {
+      "type": "string"
+    },
+    "reward_type": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "fulfilled",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "claimed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fulfilled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fulfilled_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fan_email",
+    "owner_type",
+    "owner_id",
+    "tier_id"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.fan_email": "{{user.email}}"
+        },
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

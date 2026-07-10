@@ -1,0 +1,151 @@
+{
+  "name": "GiveawayEntry",
+  "type": "object",
+  "properties": {
+    "giveaway_id": {
+      "type": "string"
+    },
+    "giveaway_title": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "under_review",
+        "approved",
+        "rejected",
+        "winner",
+        "not_selected"
+      ],
+      "default": "submitted"
+    },
+    "proof_image_url": {
+      "type": "string"
+    },
+    "proof_link": {
+      "type": "string"
+    },
+    "proof_note": {
+      "type": "string"
+    },
+    "rejection_reason": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "is_winner": {
+      "type": "boolean",
+      "default": false
+    },
+    "prize_status": {
+      "type": "string",
+      "enum": [
+        "won",
+        "claim_required",
+        "address_required",
+        "processing",
+        "shipped",
+        "completed"
+      ],
+      "default": "won"
+    },
+    "prize_tracking": {
+      "type": "string"
+    },
+    "delivery_address": {
+      "type": "string"
+    },
+    "delivery_name": {
+      "type": "string"
+    },
+    "delivery_notes": {
+      "type": "string"
+    },
+    "notified_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "giveaway_id",
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "artist"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "artist"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

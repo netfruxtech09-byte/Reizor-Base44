@@ -1,0 +1,103 @@
+{
+  "name": "OrganizerStorageRecord",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string",
+      "description": "User ID of the organizer who owns this file"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "CDN URL of the uploaded file"
+    },
+    "file_key": {
+      "type": "string",
+      "description": "Spaces object key"
+    },
+    "file_size_bytes": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "mime_type": {
+      "type": "string"
+    },
+    "file_category": {
+      "type": "string",
+      "enum": [
+        "event_image",
+        "event_video",
+        "flyer",
+        "ai_flyer",
+        "ai_flyer_upload",
+        "ai_flyer_generated_image",
+        "ai_flyer_generated_video",
+        "media_library",
+        "video_360",
+        "community",
+        "community_image",
+        "community_video",
+        "other"
+      ],
+      "default": "other"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Associated event ID if applicable"
+    },
+    "month_key": {
+      "type": "string",
+      "description": "YYYY-MM, used for monthly grouping"
+    },
+    "deleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "deleted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "organizer_id",
+    "file_url",
+    "file_size_bytes"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.organizer_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.organizer_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "name": "TechnicalRider",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_email": {
+      "type": "string"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": false
+    },
+    "sound_requirements": {
+      "type": "string"
+    },
+    "lighting_requirements": {
+      "type": "string"
+    },
+    "stage_notes": {
+      "type": "string"
+    },
+    "backline": {
+      "type": "string"
+    },
+    "hospitality": {
+      "type": "string"
+    },
+    "additional_notes": {
+      "type": "string"
+    },
+    "stage_plot_url": {
+      "type": "string"
+    },
+    "input_list_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "artist_id"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "data.is_public": true
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.artist_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

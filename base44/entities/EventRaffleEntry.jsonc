@@ -1,0 +1,101 @@
+{
+  "name": "EventRaffleEntry",
+  "type": "object",
+  "description": "A user's entry into an event raffle pool. One entry per user per raffle.",
+  "properties": {
+    "raffle_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "eligibility_action": {
+      "type": "string"
+    },
+    "proof_note": {
+      "type": "string",
+      "description": "Optional proof submitted by user (e.g. repost link)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "entered",
+        "winner",
+        "not_selected"
+      ],
+      "default": "entered"
+    },
+    "is_winner": {
+      "type": "boolean",
+      "default": false
+    },
+    "notified_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "raffle_id",
+    "event_id",
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

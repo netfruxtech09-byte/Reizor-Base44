@@ -1,0 +1,71 @@
+{
+  "name": "PollVote",
+  "type": "object",
+  "properties": {
+    "poll_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "voter_email": {
+      "type": "string"
+    },
+    "voter_name": {
+      "type": "string"
+    },
+    "choice": {
+      "type": "string"
+    },
+    "choice_index": {
+      "type": "number",
+      "description": "Index into the options array"
+    },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "For multi-select: array of chosen indices"
+    }
+  },
+  "required": [
+    "poll_id",
+    "voter_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "data.voter_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "data.voter_email": "{{user.email}}"
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.voter_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

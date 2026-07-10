@@ -1,0 +1,91 @@
+{
+  "name": "Review",
+  "type": "object",
+  "properties": {
+    "review_target": {
+      "type": "string",
+      "enum": [
+        "event",
+        "artist",
+        "organizer"
+      ],
+      "default": "event"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "reviewer_email": {
+      "type": "string"
+    },
+    "reviewer_name": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "body": {
+      "type": "string"
+    },
+    "organizer_reply": {
+      "type": "string"
+    },
+    "organizer_reply_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "reviewer_email",
+    "rating"
+  ],
+  "rls": {
+    "create": {
+      "data.reviewer_email": "{{user.email}}"
+    },
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "data.reviewer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.reviewer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

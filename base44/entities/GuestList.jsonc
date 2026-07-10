@@ -1,0 +1,173 @@
+{
+  "name": "GuestList",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "guest_type": {
+      "type": "string",
+      "enum": [
+        "Artist Guest",
+        "Production Guest",
+        "Organizer Guest",
+        "VIP Guest",
+        "Media Guest",
+        "Staff Guest",
+        "Custom"
+      ],
+      "default": "Organizer Guest"
+    },
+    "custom_label": {
+      "type": "string",
+      "description": "Custom label when guest_type is Custom"
+    },
+    "whose_guest": {
+      "type": "string",
+      "description": "Name of who this guest belongs to, e.g. DJ Name, Sponsor"
+    },
+    "ticket_type": {
+      "type": "string",
+      "description": "Ticket type label, e.g. GA, VIP, Backstage",
+      "default": "General"
+    },
+    "allowed_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Number of people allowed (for plus-ones or groups)"
+    },
+    "checked_in": {
+      "type": "boolean",
+      "default": false
+    },
+    "checked_in_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checked_in_by": {
+      "type": "string"
+    },
+    "added_by_name": {
+      "type": "string"
+    },
+    "added_by_email": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "csv_import",
+        "excel_import"
+      ],
+      "default": "manual"
+    }
+  },
+  "required": [
+    "event_id",
+    "first_name",
+    "last_name",
+    "guest_type"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "manager"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    }
+  }
+}

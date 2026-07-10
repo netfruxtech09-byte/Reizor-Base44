@@ -1,0 +1,107 @@
+{
+  "name": "OrganizerProfile",
+  "type": "object",
+  "properties": {
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "business_name": {
+      "type": "string",
+      "description": "Public Organizer / Business / Brand name shown to fans on the organizer page, events, search, follow lists, and signup notification emails."
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Primary Contact Name \u2014 for internal account communication only. Never shown as the public organizer name."
+    },
+    "needs_name_review": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the public business_name is missing, too short, numeric-only, or identical to the contact name. Admin should review/correct before approving."
+    },
+    "phone": {
+      "type": "string"
+    },
+    "profile_image": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "follower_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of unique fans following this organizer"
+    },
+    "booking_notifications_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the organizer wants to receive artist booking availability notifications"
+    },
+    "preferred_genres": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Genres the organizer is interested in for booking notifications",
+      "default": []
+    },
+    "is_admin_workspace": {
+      "type": "boolean",
+      "default": false,
+      "description": "Hidden internal workspace for Admin-managed imported events. Not shown publicly."
+    }
+  },
+  "required": [
+    "organizer_id",
+    "organizer_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

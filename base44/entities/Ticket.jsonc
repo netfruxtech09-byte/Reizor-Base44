@@ -1,0 +1,131 @@
+{
+  "name": "Ticket",
+  "type": "object",
+  "properties": {
+    "ticket_code": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "ticket_type_id": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "scanned",
+        "refunded",
+        "cancelled",
+        "transferred"
+      ],
+      "default": "active"
+    },
+    "scanned_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scanned_by": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "ticket_type_name": {
+      "type": "string"
+    },
+    "price_paid": {
+      "type": "number"
+    },
+    "qr_data": {
+      "type": "string"
+    },
+    "paid_with_credit": {
+      "type": "boolean",
+      "default": false
+    },
+    "credit_id_used": {
+      "type": "string"
+    },
+    "purchased_with_loyalty": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_resale": {
+      "type": "boolean",
+      "default": false
+    },
+    "resale_original_price": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "ticket_code",
+    "event_id",
+    "ticket_type_id",
+    "order_id",
+    "owner_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.owner_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

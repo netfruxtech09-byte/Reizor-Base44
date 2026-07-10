@@ -1,0 +1,198 @@
+{
+  "name": "WhiteLabel",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email of the WL account owner \u2014 must match the logged-in user's email after setup"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID of the WL account owner \u2014 set during setup completion for stronger ownership binding"
+    },
+    "brand_name": {
+      "type": "string"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string",
+      "description": "Custom domain for this white label, e.g. events.mybrand.com"
+    },
+    "parent_wl_id": {
+      "type": "string",
+      "description": "ID of the parent WhiteLabel if this is a Sub-White-Label"
+    },
+    "parent_wl_name": {
+      "type": "string",
+      "description": "Name of the parent WhiteLabel for display"
+    },
+    "can_add_artists": {
+      "type": "boolean",
+      "default": true
+    },
+    "can_add_organizers": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false
+    },
+    "signup_status": {
+      "type": "string",
+      "enum": [
+        "invited",
+        "completed",
+        "expired",
+        "cancelled"
+      ],
+      "default": "invited"
+    },
+    "invite_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invite email was last (re)sent"
+    },
+    "invite_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Invite link expiry \u2014 14 days from send by default"
+    },
+    "permitted_features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revenue_rates": {
+      "type": "object",
+      "properties": {
+        "merch": {
+          "type": "number",
+          "default": 0
+        },
+        "tickets": {
+          "type": "number",
+          "default": 0
+        },
+        "donations": {
+          "type": "number",
+          "default": 0
+        },
+        "shoutouts": {
+          "type": "number",
+          "default": 0
+        },
+        "fan_tiers": {
+          "type": "number",
+          "default": 0
+        },
+        "digital_products": {
+          "type": "number",
+          "default": 0
+        },
+        "bookings": {
+          "type": "number",
+          "default": 0,
+          "description": "Always 0 \u2014 artist bookings are fee-free"
+        }
+      }
+    },
+    "ticket_fee_type": {
+      "type": "string",
+      "enum": [
+        "percentage",
+        "flat",
+        "both"
+      ],
+      "default": "percentage"
+    },
+    "ticket_fee_flat": {
+      "type": "number",
+      "default": 0
+    },
+    "extra_ticket_fee_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Extra % fee added on top of platform fee \u2014 goes to white label"
+    },
+    "extra_ticket_fee_flat": {
+      "type": "number",
+      "default": 0,
+      "description": "Extra flat fee per ticket added on top of platform fee \u2014 goes to white label"
+    },
+    "platform_fee_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Reizor platform fee % charged to this WL \u2014 set by Main Admin only"
+    },
+    "managed_artist_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Auto-populated when artists sign up via white label invite link"
+    },
+    "managed_organizer_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Auto-populated when organizers sign up via white label invite link"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.email": "{{user.email}}"
+        },
+        {
+          "data.user_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.email": "{{user.email}}"
+        },
+        {
+          "data.user_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

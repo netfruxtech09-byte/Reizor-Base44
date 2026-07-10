@@ -1,0 +1,150 @@
+{
+  "name": "ExternalEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "venue_address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "cover_image": {
+      "type": "string"
+    },
+    "artists": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affiliate_url": {
+      "type": "string"
+    },
+    "affiliate_source": {
+      "type": "string",
+      "enum": [
+        "ticketmaster",
+        "eventbrite",
+        "seatgeek",
+        "viagogo",
+        "stubhub",
+        "other"
+      ],
+      "default": "other"
+    },
+    "affiliate_code": {
+      "type": "string"
+    },
+    "commission_rate": {
+      "type": "number",
+      "default": 5
+    },
+    "min_price": {
+      "type": "number"
+    },
+    "max_price": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "click_count": {
+      "type": "number",
+      "default": 0
+    },
+    "estimated_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "confirmed_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "external_id": {
+      "type": "string"
+    },
+    "managed_mode": {
+      "type": "string",
+      "enum": [
+        "affiliate",
+        "reizor"
+      ],
+      "default": "affiliate",
+      "description": "affiliate = redirect to external ticket URL; reizor = linked native Event managed on Reizor"
+    },
+    "linked_event_id": {
+      "type": "string",
+      "description": "ID of the linked native Reizor Event record when managed_mode = reizor"
+    },
+    "imported_by_email": {
+      "type": "string",
+      "description": "Admin email who triggered the Reizor import"
+    },
+    "imported_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the event was converted to a Reizor-managed event"
+    },
+    "provider_event_url": {
+      "type": "string",
+      "description": "Original provider event page URL for audit reference"
+    }
+  },
+  "required": [
+    "title",
+    "date",
+    "affiliate_url",
+    "affiliate_source"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

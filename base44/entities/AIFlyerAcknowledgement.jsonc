@@ -1,0 +1,65 @@
+{
+  "name": "AIFlyerAcknowledgement",
+  "type": "object",
+  "properties": {
+    "organizer_user_id": {
+      "type": "string"
+    },
+    "organizer_email": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "acknowledgement_text": {
+      "type": "string"
+    },
+    "checkbox_checked": {
+      "type": "boolean",
+      "default": true
+    },
+    "accepted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "user_agent": {
+      "type": "string"
+    },
+    "terms_version": {
+      "type": "string",
+      "default": "v1"
+    }
+  },
+  "required": [
+    "organizer_email",
+    "checkbox_checked"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

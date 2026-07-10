@@ -1,0 +1,77 @@
+{
+  "name": "AffiliateEarning",
+  "type": "object",
+  "properties": {
+    "external_event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "affiliate_source": {
+      "type": "string"
+    },
+    "click_user_email": {
+      "type": "string"
+    },
+    "click_user_name": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "click",
+        "conversion",
+        "manual_entry"
+      ],
+      "default": "click"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "commission_rate": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "paid",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "external_event_id",
+    "affiliate_source",
+    "action"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

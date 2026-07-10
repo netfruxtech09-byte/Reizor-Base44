@@ -1,0 +1,119 @@
+{
+  "name": "AdminExpense",
+  "type": "object",
+  "properties": {
+    "holder_type": {
+      "type": "string",
+      "enum": [
+        "platform",
+        "artist",
+        "organizer",
+        "white_label"
+      ],
+      "description": "Type of account this expense is related to"
+    },
+    "holder_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "description": "ID of the artist, organizer (user), or white label. Null for platform expenses."
+    },
+    "holder_name": {
+      "type": "string",
+      "description": "Display name of the holder"
+    },
+    "event_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "description": "ID of the related event. Optional for platform expenses."
+    },
+    "event_title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "description": "Title of the related event"
+    },
+    "expense_name": {
+      "type": "string",
+      "description": "Name/description of the expense"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Expense amount"
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "Marketing",
+        "Operations",
+        "Venue",
+        "Security",
+        "Production",
+        "Staffing",
+        "Technology",
+        "Legal",
+        "Finance",
+        "Travel",
+        "Other",
+        null
+      ],
+      "default": null,
+      "description": "Expense category"
+    },
+    "expense_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "default": null,
+      "description": "Date the expense occurred"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "description": "Optional admin notes"
+    }
+  },
+  "required": [
+    "holder_type",
+    "holder_name",
+    "expense_name",
+    "amount"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

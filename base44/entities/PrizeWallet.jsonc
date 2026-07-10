@@ -1,0 +1,145 @@
+{
+  "name": "PrizeWallet",
+  "type": "object",
+  "description": "User's won prizes stored in their wallet. Each prize has a unique redemption code/QR. Sourced from Giveaways or from Loyalty Reward Tiers.",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "giveaway",
+        "loyalty_tier"
+      ],
+      "default": "giveaway"
+    },
+    "giveaway_id": {
+      "type": "string"
+    },
+    "giveaway_title": {
+      "type": "string"
+    },
+    "tier_id": {
+      "type": "string",
+      "description": "LoyaltyRewardTier id, set when source_type is loyalty_tier"
+    },
+    "tier_name": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string"
+    },
+    "organizer_name": {
+      "type": "string"
+    },
+    "prize_title": {
+      "type": "string",
+      "description": "e.g. 'Free T-Shirt', 'Free Drink', 'VIP Upgrade'"
+    },
+    "prize_description": {
+      "type": "string"
+    },
+    "prize_type": {
+      "type": "string",
+      "enum": [
+        "custom",
+        "physical_item",
+        "wallet_credit",
+        "free_ticket",
+        "free_drink",
+        "free_entry",
+        "merchandise",
+        "discount",
+        "credit"
+      ]
+    },
+    "redemption_code": {
+      "type": "string",
+      "description": "Unique code for this prize instance"
+    },
+    "qr_code_url": {
+      "type": "string",
+      "description": "QR code image URL for redemption"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "won",
+        "unclaimed",
+        "redeemed",
+        "expired"
+      ],
+      "default": "won"
+    },
+    "redeemed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "redeemed_by_email": {
+      "type": "string"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "redemption_instructions": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "prize_title"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

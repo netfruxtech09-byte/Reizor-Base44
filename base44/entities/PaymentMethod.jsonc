@@ -1,0 +1,58 @@
+{
+  "name": "PaymentMethod",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "stripe_payment_method_id": {
+      "type": "string"
+    },
+    "card_brand": {
+      "type": "string"
+    },
+    "card_last_four": {
+      "type": "string"
+    },
+    "expiry_month": {
+      "type": "number"
+    },
+    "expiry_year": {
+      "type": "number"
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": true
+    },
+    "billing_zip": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "deleted"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "user_email",
+    "stripe_payment_method_id"
+  ],
+  "rls": {
+    "create": {
+      "data.user_email": "{{user.email}}"
+    },
+    "read": {
+      "data.user_email": "{{user.email}}"
+    },
+    "update": {
+      "data.user_email": "{{user.email}}"
+    },
+    "delete": {
+      "data.user_email": "{{user.email}}"
+    }
+  }
+}

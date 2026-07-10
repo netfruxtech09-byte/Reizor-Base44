@@ -1,0 +1,86 @@
+{
+  "name": "Scan",
+  "type": "object",
+  "properties": {
+    "ticket_id": {
+      "type": "string"
+    },
+    "ticket_code": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "scanned_by_email": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "valid",
+        "invalid",
+        "duplicate",
+        "expired",
+        "cancelled"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ticket_code",
+    "event_id",
+    "result"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "organizer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

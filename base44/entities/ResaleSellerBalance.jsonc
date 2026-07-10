@@ -1,0 +1,69 @@
+{
+  "name": "ResaleSellerBalance",
+  "type": "object",
+  "properties": {
+    "seller_email": {
+      "type": "string",
+      "description": "Email of the fan who sold tickets via resale"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "available_balance": {
+      "type": "number",
+      "default": 0,
+      "description": "Total available balance from resale sales not yet paid out"
+    },
+    "pending_payout_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount currently in a pending payout request"
+    },
+    "total_earned": {
+      "type": "number",
+      "default": 0,
+      "description": "Total amount ever earned from resales (including paid out and pending)"
+    },
+    "total_paid_out": {
+      "type": "number",
+      "default": 0,
+      "description": "Total amount successfully paid out to seller"
+    },
+    "last_transaction_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "seller_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.seller_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
